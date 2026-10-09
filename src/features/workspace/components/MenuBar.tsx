@@ -50,7 +50,7 @@ import {
   ObjectsAlignLeft,
   ObjectsAlignRight,
   ObjectsAlignTop,
-  Palette,
+
   PencilToSquare,
   Picture,
   Rectangles4,
@@ -75,7 +75,7 @@ import { DiscordIcon, LaserPointerStylusIcon } from "@shared/ui/icons";
 import { ColorSwatchPicker } from "@shared/ui/ColorSwatchPicker";
 import { Slider } from "@shared/ui/slider";
 import { Switch } from "@shared/ui/switch";
-import { ThemeDialog } from "@app/theme/themeDialog";
+import { ThemeMenuSub } from "@app/theme/ThemeMenuSub";
 import type { ExportImageFormat } from "@features/workspace/exportImage";
 import {
   Select,
@@ -114,6 +114,13 @@ export interface MenuBarProps {
   afterSettings?: ReactNode;
 }
 
+/** Shared button visuals for dialog actions (Tailwind). */
+const DIALOG_BTN_BASE =
+  "cursor-pointer rounded-[10px] border-none px-[14px] py-[10px] text-[13px] font-semibold shadow-none outline-none transition-[0.1s]";
+const DIALOG_BTN_PRIMARY = `${DIALOG_BTN_BASE} bg-(--accent) text-white shadow-[0_10px_20px_rgba(var(--accent-rgb),0.25)] hover:brightness-95 dark:brightness-110`;
+const DIALOG_BTN_SECONDARY = `${DIALOG_BTN_BASE} bg-black/[0.08] text-[#111827] hover:bg-black/[0.12] dark:bg-white/[0.08] dark:text-[#f3f4f6] dark:hover:bg-white/[0.12]`;
+const DIALOG_BTN_DANGER = `${DIALOG_BTN_BASE} bg-[#ef4444] text-white shadow-[0_10px_20px_rgba(239,68,68,0.25)] hover:bg-[#dc2626] dark:shadow-[0_12px_24px_rgba(239,68,68,0.35)]`;
+
 export const MenuBar = ({
   scene,
   locale,
@@ -131,7 +138,6 @@ export const MenuBar = ({
   beforeLinks,
   afterSettings,
 }: MenuBarProps) => {
-  const [isThemeDialogOpen, setIsThemeDialogOpen] = useState(false);
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [isExportingImage, setIsExportingImage] = useState(false);
@@ -283,7 +289,7 @@ export const MenuBar = ({
   ]);
 
   return (
-    <div className="settings-bar">
+    <div className="z-10 flex w-fit select-none items-center justify-center gap-px rounded-xl border border-(--panel-border) bg-(--panel-bg) p-0.5 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle]">
       <input
         ref={projectInputRef}
         type="file"
@@ -293,7 +299,7 @@ export const MenuBar = ({
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className={`tool-item`} onClick={() => { }}>
+          <button type="button" className="flex size-10 items-center justify-center rounded-[10px] border-none bg-transparent p-[10px] text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] dark:text-[#e5e7eb] [&_svg]:size-5" onClick={() => { }}>
             <MenuIcon />
           </button>
         </DropdownMenuTrigger>
@@ -404,7 +410,7 @@ export const MenuBar = ({
                 }}
               >
                 <Cup /> {messages.menu.zenMode}
-                <div className="drawo-keybind">
+                <div className="[.drawo-zen-mode_&]:hidden">
                   <span>{Alt()}</span>+ <span>Z</span>
                 </div>
               </DropdownMenuCheckboxItem>
@@ -419,7 +425,7 @@ export const MenuBar = ({
                 }}
               >
                 <ChevronsExpandUpRight /> {messages.menu.presentationMode}
-                <div className="drawo-keybind">
+                <div className="[.drawo-zen-mode_&]:hidden">
                   <span>{Alt()}</span>+ <span>R</span>
                 </div>
               </DropdownMenuCheckboxItem>
@@ -568,14 +574,32 @@ export const MenuBar = ({
             <CrownDiamond /> {messages.menu.donate}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              setIsThemeDialogOpen(true);
+          <ThemeMenuSub
+            messages={messages}
+            currentTheme={`${scene.settings.colorScheme}-${scene.settings.theme === "dark" ? "dark" : "light"}`}
+            setTheme={(theme) => {
+              const separatorIndex = theme.lastIndexOf("-");
+              if (separatorIndex === -1) {
+                return;
+              }
+
+              const colorScheme = theme.slice(
+                0,
+                separatorIndex,
+              ) as Scene["settings"]["colorScheme"];
+              const mode = theme.slice(separatorIndex + 1);
+              if (mode !== "light" && mode !== "dark") {
+                return;
+              }
+
+              setSceneWithoutHistory((currentScene) =>
+                updateSceneSettings(currentScene, {
+                  colorScheme,
+                  theme: mode,
+                }),
+              );
             }}
-          >
-            <Palette />
-            {messages.menu.themes}
-          </DropdownMenuItem>
+          />
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>
               <Gear />
@@ -654,7 +678,7 @@ export const MenuBar = ({
             </DialogDescription>
           </DialogHeader>
           <p className="label">{messages.dialogs.laserCanvas.color}</p>
-          <div className="colorswatch-dialog">
+          <div className="[&_*]:[--size:32px] [&_[data-slot=color-swatch-container]]:size-[42px]">
             <ColorSwatchPicker
               colors={[
                 "#FF1A28",
@@ -671,7 +695,7 @@ export const MenuBar = ({
               renderItem={({ color, swatch }) => (
                 <div
                   key={color}
-                  className="drawo-colorselect-item"
+                  className="float-left w-fit shrink-0 rounded-full bg-transparent p-[4px_1px]! transition-[0.1s] hover:scale-105"
                   onPointerDown={() => {
                     setLaserSettings((prev) => ({ ...prev, color }));
                   }}
@@ -711,7 +735,7 @@ export const MenuBar = ({
             min={0.1}
             step={0.1}
           />
-          <div className="drawo-checkbox-section">
+          <div className="mt-2 flex items-center gap-2.5 [&_span:not([data-slot=switch]_*):not([data-slot=switch])]:opacity-80">
             <Switch
               checked={laserSettings.shadow}
               onCheckedChange={(e) => {
@@ -721,34 +745,34 @@ export const MenuBar = ({
                 }));
               }}
             />
-            <span className="text-flex">
+            <span className="flex items-center gap-3 [&_.drawo-beta]:ml-0 [&_.drawo-beta]:pl-0">
               {messages.dialogs.laserCanvas.enableShadows}{" "}
-              <span className="drawo-beta">
+              <span className="ml-auto flex items-center gap-0.5 pl-6 text-xs opacity-70 [&_span]:rounded-md [&_span]:bg-[rgba(var(--accent-rgb),0.5)] [&_span]:px-1 [&_span]:py-0.5 [&_span]:font-medium [&_span]:text-[rgb(var(--accent-rgb))]">
                 <span>BETA</span>
               </span>
             </span>
           </div>
 
           <DialogFooter>
-            <div className="drawo-dialog-actions drawo-dialog-actions-separated">
-              <div className="drawo-dialog-actions-section">
+            <div className="flex w-full flex-col-reverse justify-between gap-2 md:flex-row md:justify-between">
+              <div className="flex gap-2.5">
                 <button
                   type="button"
-                  className="drawo-btn-secondary"
+                  className={DIALOG_BTN_SECONDARY}
                   onClick={handleLaserReset}
                 >
                   {messages.dialogs.laserCanvas.reset}
                 </button>
               </div>
-              <div className="drawo-dialog-actions-section">
+              <div className="flex gap-2.5">
                 <DialogClose asChild>
-                  <button type="button" className="drawo-btn-secondary">
+                  <button type="button" className={DIALOG_BTN_SECONDARY}>
                     {messages.dialogs.laserCanvas.cancel}
                   </button>
                 </DialogClose>
                 <button
                   type="button"
-                  className="drawo-btn-primary"
+                  className={DIALOG_BTN_PRIMARY}
                   onClick={handleLaserSave}
                 >
                   {messages.dialogs.laserCanvas.save}
@@ -769,8 +793,8 @@ export const MenuBar = ({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="drawo-export-grid">
-            <div className="drawo-export-field">
+          <div className="grid gap-3">
+            <div className="grid gap-2">
               <p className="label">{messages.dialogs.exportImage.format}</p>
               <Select
                 value={exportFormat}
@@ -785,7 +809,7 @@ export const MenuBar = ({
                   }
                 }}
               >
-                <SelectTrigger className="drawo-select-trigger">
+                <SelectTrigger className="inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 rounded-[24px] border-none bg-[rgba(var(--text-rgb),0.1)] px-5 py-5 shadow-none outline-none [corner-shape:squircle]">
                   <SelectValue
                     placeholder={messages.dialogs.exportImage.format}
                   />
@@ -799,7 +823,7 @@ export const MenuBar = ({
               </Select>
             </div>
 
-            <div className="drawo-export-field">
+            <div className="grid gap-2">
               <p className="label">
                 {messages.dialogs.exportImage.quality} ({exportQuality}x)
               </p>
@@ -814,7 +838,7 @@ export const MenuBar = ({
               />
             </div>
 
-            <div className="drawo-export-field">
+            <div className="grid gap-2">
               <p className="label">
                 {messages.dialogs.exportImage.padding} ({exportPadding}px)
               </p>
@@ -830,7 +854,7 @@ export const MenuBar = ({
             </div>
           </div>
 
-          <div className="drawo-checkbox-section">
+          <div className="mt-2 flex items-center gap-2.5 [&_span:not([data-slot=switch]_*):not([data-slot=switch])]:opacity-80">
             <Switch
               disabled={exportFormat === "jpg"}
               checked={
@@ -840,27 +864,27 @@ export const MenuBar = ({
                 setExportTransparentBackground(value);
               }}
             />
-            <span className="text-flex">
+            <span className="flex items-center gap-3 [&_.drawo-beta]:ml-0 [&_.drawo-beta]:pl-0">
               {messages.dialogs.exportImage.transparentBackground}
             </span>
           </div>
 
           {exportFormat === "jpg" && (
-            <p className="label drawo-export-note">
+            <p className="label mt-2.5">
               {messages.dialogs.exportImage.jpgNoTransparency}
             </p>
           )}
 
           <DialogFooter>
-            <div className="drawo-dialog-actions">
+            <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end">
               <DialogClose asChild>
-                <button type="button" className="drawo-btn-secondary">
+                <button type="button" className={DIALOG_BTN_SECONDARY}>
                   {messages.dialogs.exportImage.cancel}
                 </button>
               </DialogClose>
               <button
                 type="button"
-                className="drawo-btn-primary"
+                className={DIALOG_BTN_PRIMARY}
                 onClick={() => {
                   void handleExportImage();
                 }}
@@ -874,34 +898,6 @@ export const MenuBar = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <ThemeDialog
-        isOpen={isThemeDialogOpen}
-        onOpenChange={setIsThemeDialogOpen}
-        currentTheme={`${scene.settings.colorScheme}-${scene.settings.theme === "dark" ? "dark" : "light"}`}
-        messages={messages}
-        setTheme={(theme) => {
-          const separatorIndex = theme.lastIndexOf("-");
-          if (separatorIndex === -1) {
-            return;
-          }
-
-          const colorScheme = theme.slice(
-            0,
-            separatorIndex,
-          ) as Scene["settings"]["colorScheme"];
-          const mode = theme.slice(separatorIndex + 1);
-          if (mode !== "light" && mode !== "dark") {
-            return;
-          }
-
-          setSceneWithoutHistory((currentScene) =>
-            updateSceneSettings(currentScene, {
-              colorScheme,
-              theme: mode,
-            }),
-          );
-        }}
-      />
       <Dialog open={isClearDialogOpen} onOpenChange={setIsClearDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -911,15 +907,15 @@ export const MenuBar = ({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <div className="drawo-dialog-actions">
+            <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end">
               <DialogClose asChild>
-                <button type="button" className="drawo-btn-secondary">
+                <button type="button" className={DIALOG_BTN_SECONDARY}>
                   {messages.dialogs.clearCanvas.cancel}
                 </button>
               </DialogClose>
               <button
                 type="button"
-                className="drawo-btn-danger"
+                className={DIALOG_BTN_DANGER}
                 onClick={handleClearCanvas}
               >
                 {messages.dialogs.clearCanvas.confirm}
@@ -940,11 +936,11 @@ export const MenuBar = ({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <div className="drawo-dialog-actions">
+            <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end">
               <DialogClose asChild>
                 <button
                   type="button"
-                  className="drawo-btn-secondary"
+                  className={DIALOG_BTN_SECONDARY}
                   onClick={() => {
                     setPendingProjectFile(null);
                   }}
@@ -954,7 +950,7 @@ export const MenuBar = ({
               </DialogClose>
               <button
                 type="button"
-                className="drawo-btn-danger"
+                className={DIALOG_BTN_DANGER}
                 onClick={handleConfirmOpenProject}
               >
                 {messages.dialogs.openProject.confirm}

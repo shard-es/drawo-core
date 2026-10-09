@@ -5,6 +5,39 @@ import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { CheckIcon } from "lucide-react";
 import { Check, ChevronRight } from "@gravity-ui/icons";
 
+const DROPDOWN_CONTENT_CLASS =
+  "z-50 w-[250px]! min-w-32 mt-1 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)]";
+
+const DROPDOWN_SUBCONTENT_CLASS =
+  "z-50 min-w-56 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)]";
+
+const DROPDOWN_ITEM_CLASS =
+  "relative flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-4 py-2.5 pr-9 text-sm whitespace-nowrap outline-none [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] focus:bg-[rgba(var(--text-rgb),0.1)] data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] [&_svg]:size-4 [&_svg]:min-w-4 [&_svg]:min-h-4 [&_svg_*]:stroke-[1.5]";
+
+const DROPDOWN_ITEM_VARIANT_CLASS =
+  "data-[variant=accent]:text-[rgb(var(--accent-rgb))]! data-[variant=accent]:[filter:brightness(0.5)] data-[variant=accent]:hover:bg-[rgba(var(--accent-rgb),0.179)]! data-[variant=destructive]:text-[rgb(255,4,4)]! data-[variant=destructive]:hover:bg-[rgba(255,0,0,0.179)]! dark:data-[variant=destructive]:text-[rgb(255,126,126)]! dark:data-[variant=destructive]:hover:bg-[rgba(255,126,126,0.1)]!";
+
+const DROPDOWN_ITEM_DISABLED_CLASS =
+  "data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50";
+
+/* Radix renders `data-disabled` (empty value) and `aria-disabled="true"` on the
+   sub trigger itself, so the state is matched by attribute presence there. */
+const DROPDOWN_SUBTRIGGER_DISABLED_CLASS =
+  "[&[data-disabled],&[aria-disabled=true]]:cursor-not-allowed [&[data-disabled],&[aria-disabled=true]]:opacity-50";
+
+const DROPDOWN_INDICATOR_CLASS =
+  "absolute right-3 top-1/2 [transform:translateY(-40%)] pointer-events-none";
+
+const DROPDOWN_LABEL_CLASS = "px-1.5 py-1 text-xs font-medium text-[#666]";
+
+const DROPDOWN_SEPARATOR_CLASS =
+  "my-1 h-px bg-[rgba(var(--text-rgb),0.1)]";
+
+const DROPDOWN_SHORTCUT_CLASS =
+  "ml-auto text-xs text-[#777] tracking-[0.05em]";
+
+const DROPDOWN_CHEVRON_CLASS = "absolute right-3 ml-auto opacity-50";
+
 function DropdownMenu(
   props: React.ComponentProps<typeof DropdownMenuPrimitive.Root>,
 ) {
@@ -43,7 +76,7 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
         align={align}
         className={
-          "drawo-dropdown-content" + (className ? " " + className : "")
+          DROPDOWN_CONTENT_CLASS + (className ? " " + className : "")
         }
         {...props}
       />
@@ -76,7 +109,14 @@ function DropdownMenuItem({
       data-inset={inset}
       data-variant={variant}
       data-disabled={disabled}
-      className={"drawo-dropdown-item" + (className ? " " + className : "")}
+      className={
+        DROPDOWN_ITEM_CLASS +
+        " " +
+        DROPDOWN_ITEM_VARIANT_CLASS +
+        " " +
+        DROPDOWN_ITEM_DISABLED_CLASS +
+        (className ? " " + className : "")
+      }
       {...props}
     />
   );
@@ -96,12 +136,12 @@ function DropdownMenuCheckboxItem({
       data-slot="dropdown-menu-checkbox-item"
       data-inset={inset}
       className={
-        "drawo-dropdown-checkboxitem" + (className ? " " + className : "")
+        DROPDOWN_ITEM_CLASS + (className ? " " + className : "")
       }
       checked={checked}
       {...props}
     >
-      <span className="drawo-dropdown-indicator">
+      <span className={DROPDOWN_INDICATOR_CLASS}>
         <DropdownMenuPrimitive.ItemIndicator>
           <Check />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -135,11 +175,11 @@ function DropdownMenuRadioItem({
       data-slot="dropdown-menu-radio-item"
       data-inset={inset}
       className={
-        "drawo-dropdown-radioitem" + (className ? " " + className : "")
+        DROPDOWN_ITEM_CLASS + (className ? " " + className : "")
       }
       {...props}
     >
-      <span className="drawo-dropdown-indicator">
+      <span className={DROPDOWN_INDICATOR_CLASS}>
         <DropdownMenuPrimitive.ItemIndicator>
           <CheckIcon />
         </DropdownMenuPrimitive.ItemIndicator>
@@ -160,7 +200,7 @@ function DropdownMenuLabel({
     <DropdownMenuPrimitive.Label
       data-slot="dropdown-menu-label"
       data-inset={inset}
-      className={"drawo-dropdown-label" + (className ? " " + className : "")}
+      className={DROPDOWN_LABEL_CLASS + (className ? " " + className : "")}
       {...props}
     />
   );
@@ -174,7 +214,7 @@ function DropdownMenuSeparator({
     <DropdownMenuPrimitive.Separator
       data-slot="dropdown-menu-separator"
       className={
-        "drawo-dropdown-separator" + (className ? " " + className : "")
+        DROPDOWN_SEPARATOR_CLASS + (className ? " " + className : "")
       }
       {...props}
     />
@@ -188,7 +228,7 @@ function DropdownMenuShortcut({
   return (
     <span
       data-slot="dropdown-menu-shortcut"
-      className={"drawo-dropdown-shortcut" + (className ? " " + className : "")}
+      className={DROPDOWN_SHORTCUT_CLASS + (className ? " " + className : "")}
       {...props}
     />
   );
@@ -213,14 +253,15 @@ function DropdownMenuSubTrigger({
       data-slot="dropdown-menu-sub-trigger"
       data-inset={inset}
       className={
-        "drawo-dropdown-subtrigger" +
-        (props.disabled ? " disabled" : "") +
+        DROPDOWN_ITEM_CLASS +
+        " " +
+        DROPDOWN_SUBTRIGGER_DISABLED_CLASS +
         (className ? " " + className : "")
       }
       {...props}
     >
       {children}
-      <ChevronRight className="drawo-dropdown-chevron" />
+      <ChevronRight className={DROPDOWN_CHEVRON_CLASS} />
     </DropdownMenuPrimitive.SubTrigger>
   );
 }
@@ -233,7 +274,7 @@ function DropdownMenuSubContent({
     <DropdownMenuPrimitive.SubContent
       data-slot="dropdown-menu-sub-content"
       className={
-        "drawo-dropdown-subcontent" + (className ? " " + className : "")
+        DROPDOWN_SUBCONTENT_CLASS + (className ? " " + className : "")
       }
       {...props}
     />

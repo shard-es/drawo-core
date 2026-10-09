@@ -159,12 +159,10 @@ function DrawoLayout({
     : canvasNode;
 
   return (
-    <div className={`app-root ${className ?? ""}`} style={style}>
+    <div className={`app-root relative h-svh w-svw overflow-hidden bg-(--app-bg) text-(--app-fg) [&_*]:select-none! ${className ?? ""}`} style={style}>
       <TooltipProvider>
-        <div
-          className={`app-shell ${isSidebarOpen ? "app-shell--sidebar-open" : ""}`}
-        >
-          <div className="app-workspace">
+        <div className="flex h-full w-full min-w-0">
+          <div className="relative h-full min-w-0 flex-1 overflow-hidden">
             {slots.topBar ?? <DrawoTopBar />}
             {resolvedCanvasNode}
             {slots.toolBar ?? <DrawoToolBar />}

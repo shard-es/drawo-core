@@ -133,11 +133,6 @@
     },
     "textColor": "Color del texto"
   },
-  "panels": {
-    "playing": "(reproduciendo)",
-    "music": "Música",
-    "timer": "Cuenta atrás"
-  },
   "canvas": {
     "newText": "Nuevo texto",
     "tagline": "Tus dibujos se guardan localmente en el almacenamiento de tu navegador.",

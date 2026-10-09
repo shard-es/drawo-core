@@ -33,6 +33,16 @@ import {
 } from "@shared/ui/icons";
 import { Slider } from "@shared/ui/slider";
 
+/* Shows the keyboard shortcut chips at the right edge of a context-menu row.
+ * Hidden while zen mode is active (the app toggles `drawo-zen-mode` on <html>). */
+const KEYBIND =
+  "ml-auto flex items-center gap-0.5 pl-6 text-xs opacity-70 " +
+  "[.drawo-zen-mode_&]:hidden " +
+  "[&>span]:rounded-[5px] [&>span]:bg-[rgba(var(--text-rgb),0.1)] " +
+  "[&>span]:px-1 [&>span]:py-0.5 [&>span]:font-medium " +
+  "[&>span]:text-[rgba(var(--text-rgb),0.6)] [&>span]:[corner-shape:squircle] " +
+  "[&>span]:supports-[corner-shape:squircle]:rounded-[12px]";
+
 export type CanvasContextMenuSelectionType = "draw" | "image" | "multiple";
 
 interface CanvasContextMenuProps {
@@ -120,14 +130,14 @@ export const CanvasContextMenu = ({
             <ContextMenuItem onClick={onCut}>
               <Scissors />
               {localeMessages.contextMenu.cut}
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>{Ctrl()}</span> + <span>X</span>
               </span>
             </ContextMenuItem>
             <ContextMenuItem onClick={onCopy}>
               <Copy />
               {localeMessages.contextMenu.copy}
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>{Ctrl()}</span> + <span>C</span>
               </span>
             </ContextMenuItem>
@@ -136,7 +146,7 @@ export const CanvasContextMenu = ({
         <ContextMenuItem onClick={onPaste}>
           <Sticker />
           {localeMessages.contextMenu.paste}
-          <span className="drawo-keybind">
+          <span className={KEYBIND}>
             <span>{Ctrl()}</span> + <span>V</span>
           </span>
         </ContextMenuItem>
@@ -146,14 +156,14 @@ export const CanvasContextMenu = ({
             <ContextMenuItem onClick={onDuplicate}>
               <CopyPlus />
               {localeMessages.contextMenu.duplicate}
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>{Ctrl()}</span>+<span>D</span>
               </span>
             </ContextMenuItem>
             <ContextMenuItem onClick={onDelete} variant="destructive">
               <TrashBin />
               {localeMessages.contextMenu.delete}
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>Del</span>
               </span>
             </ContextMenuItem>
@@ -169,7 +179,7 @@ export const CanvasContextMenu = ({
               <ContextMenuItem onClick={onGroup}>
                 <VectorSquare />
                 {localeMessages.contextMenu.group}
-                <span className="drawo-keybind">
+                <span className={KEYBIND}>
                   <span>{Ctrl()}</span>+<span>G</span>
                 </span>
               </ContextMenuItem>
@@ -178,7 +188,7 @@ export const CanvasContextMenu = ({
               <ContextMenuItem onClick={onUngroup}>
                 <Circles5Random />
                 {localeMessages.contextMenu.ungroup}
-                <span className="drawo-keybind">
+                <span className={KEYBIND}>
                   <span>{Ctrl()}</span>+<span>{Shift()}</span>+<span>G</span>
                 </span>
               </ContextMenuItem>
@@ -217,17 +227,17 @@ export const CanvasContextMenu = ({
                 <Droplet />
                 {localeMessages.selectionBar.opacity}...
               </ContextMenuSubTrigger>
-              <ContextMenuSubContent className="drawo-contextmenu-opacity-subcontent">
+              <ContextMenuSubContent className="min-w-[230px] p-1.5">
                 <div
-                  className="drawo-contextmenu-opacity-popover"
+                  className="flex flex-col gap-2.5 rounded-[10px] p-1.5 [corner-shape:squircle]"
                   onPointerDown={(event) => event.stopPropagation()}
                   onClick={(event) => event.stopPropagation()}
                 >
-                  <div className="drawo-contextmenu-opacity-header">
+                  <div className="flex items-center justify-between gap-2 text-[15px]">
                     <span>{localeMessages.selectionBar.opacity}</span>
-                    <div className="drawo-contextmenu-opacity-input-wrap">
+                    <div className="inline-flex items-center gap-1">
                       <input
-                        className="drawo-input drawo-numberinput drawo-contextmenu-opacity-input"
+                        className="h-4 w-[54px] min-w-[54px] rounded-lg border border-(--panel-border) bg-[rgba(var(--text-rgb),0.1)] px-2 py-1 text-xs text-right [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[16px] transition-[border-color,box-shadow,background] duration-[120ms] [appearance:textfield] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:m-0"
                         type="number"
                         min={0}
                         max={100}
@@ -260,7 +270,7 @@ export const CanvasContextMenu = ({
                           }
                         }}
                       />
-                      <span className="drawo-contextmenu-opacity-unit">%</span>
+                      <span className="text-xs opacity-65">%</span>
                     </div>
                   </div>
 
@@ -290,7 +300,7 @@ export const CanvasContextMenu = ({
             >
               <TrapezoidUpLineVertical />
               Voltear horizontalmente
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>{Shift()}</span>+<span>H</span>
               </span>
             </ContextMenuItem>
@@ -300,7 +310,7 @@ export const CanvasContextMenu = ({
             >
               <TrapezoidLeftLineHorizontal />
               Voltear verticalmente
-              <span className="drawo-keybind">
+              <span className={KEYBIND}>
                 <span>{Shift()}</span>+<span>V</span>
               </span>
             </ContextMenuItem>
@@ -311,7 +321,7 @@ export const CanvasContextMenu = ({
         <ContextMenuItem disabled={!hasElements} onClick={onSelectAll}>
           <Cubes3 />
           {localeMessages.contextMenu.selectEverything}
-          <span className="drawo-keybind">
+          <span className={KEYBIND}>
             <span>{Ctrl()}</span> + <span>A</span>
           </span>
         </ContextMenuItem>

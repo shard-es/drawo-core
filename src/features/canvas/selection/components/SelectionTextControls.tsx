@@ -55,6 +55,53 @@ import type {
 } from "@features/canvas/types";
 import { NumberInput } from "@shared/ui/input";
 
+/* The selection toolbar renders inside `.selection-toolbar`, which used to give
+ * every `select-trigger` descendant these dimensions. Reproduced per-trigger. */
+const SELECT_TRIGGER =
+  "inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 " +
+  "rounded-none border-none bg-transparent px-2.5 text-sm font-medium " +
+  "text-[color:var(--popover-dark-text,#f3f4f6)] shadow-none outline-none " +
+  "transition-colors duration-150 hover:bg-[rgba(255,255,255,0.05)] " +
+  /* The trailing chevron svg (radix renders it via SelectPrimitive.Icon). */
+  "[&>svg:last-child]:size-[14px] [&>svg:last-child]:ml-2 " +
+  "[&>svg:last-child]:pointer-events-none " +
+  "[&>svg:last-child]:text-[color:var(--popover-dark-text,#b8b8b8)]";
+
+/* Swatch rows inside the colour `SelectContent` were laid out by
+ * `.drawo-colorselect-content` (fit-to-content, children forced into a row). */
+const COLORSELECT_CONTENT = "w-fit! min-w-fit! [&_*]:flex-row!";
+
+/* One colour swatch button. */
+const COLORSELECT_ITEM =
+  "float-left w-fit shrink-0 cursor-pointer rounded-full bg-transparent " +
+  "p-[4px_1px]! transition-all duration-[0.1s] hover:scale-105";
+
+/* Vertical hairline between toolbar groups. */
+const SELECTIONBAR_SEPARATOR =
+  "my-auto ml-[5px] mr-1 h-5 w-px bg-[rgba(var(--darkborder-rgb,255,255,255),1)] opacity-20";
+
+/* A font-size row in the dropdown: label left, number right. `.select-item`
+ * already provides the padding, so only layout is overridden here. */
+const FONT_SIZE_ITEM = "flex items-center justify-between gap-0.5";
+
+/* An alignment option in the text-align dropdown (icon only, centred). The
+ * `padding` beat `.select-item`'s padding via `!important`. */
+const TEXT_ALIGN_ITEM = "float-left w-fit p-2! pb-[5px]! transition-all duration-[0.1s]";
+
+/* Square toggle buttons inside the text controls (bold/italic/strikethrough). */
+const TOGGLE_SELECTIONBAR_BUTTON =
+  "flex h-(--selectiontoolbar-height) w-(--selectiontoolbar-height) items-center " +
+  "justify-center border-none p-0 text-[color:var(--popover-dark-text,white)] " +
+  "bg-transparent transition-colors duration-150 " +
+  "hover:bg-[rgba(var(--darkborder-rgb,255,255,255),0.05)] " +
+  "data-[active=true]:bg-[rgba(var(--accent-rgb),0.4)]";
+
+/* The custom colour picker is hosted in a tooltip, so it must drop the tooltip's
+ * shadow and shift well below the toolbar. Both rules were `!important`
+ * because they compete with `.drawo-tooltip-content` on the same element. */
+const CONTENT_COLOR_ULTRA_3 =
+  "[box-shadow:none]! [transform:translateY(92px)_translateX(18px)]!";
+
 interface SelectionTextControlsProps {
   scene: Scene;
   selectedIds: string[];
@@ -312,6 +359,7 @@ export const SelectionTextControls = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <SelectTrigger
+                className={SELECT_TRIGGER}
                 onPointerDown={(event) => {
                   if (textColorSelectValue !== "multi") {
                     return;
@@ -343,7 +391,7 @@ export const SelectionTextControls = ({
           </Tooltip>
           <SelectContent
             position="popper"
-            className="drawo-colorselect-content"
+            className={COLORSELECT_CONTENT}
           >
             <div>
               <ColorSwatchPicker
@@ -354,7 +402,7 @@ export const SelectionTextControls = ({
                   <SelectItem
                     key={color}
                     value={color}
-                    className="drawo-colorselect-item"
+                    className={COLORSELECT_ITEM}
                     check={false}
                     onPointerDown={
                       isMulti
@@ -392,7 +440,7 @@ export const SelectionTextControls = ({
                   <SelectItem
                     key={color}
                     value={color}
-                    className="drawo-colorselect-item"
+                    className={COLORSELECT_ITEM}
                     check={false}
                     onPointerDown={
                       isMulti
@@ -430,10 +478,10 @@ export const SelectionTextControls = ({
         }
       >
         <TooltipTrigger asChild>
-          <div className="selectionbar-separator" />
+          <div className={SELECTIONBAR_SEPARATOR} />
         </TooltipTrigger>
         <TooltipContent
-          className="drawo-content-color drawo-ultrainferior-colorcontent3"
+          className={CONTENT_COLOR_ULTRA_3}
           side="bottom"
           style={{ background: "transparent" }}
         >
@@ -477,7 +525,7 @@ export const SelectionTextControls = ({
       >
         <Tooltip>
           <TooltipTrigger asChild>
-            <SelectTrigger style={{ gap: "0px" }}>
+            <SelectTrigger className={SELECT_TRIGGER} style={{ gap: "0px" }}>
               <span style={{ width: "0px", overflow: "hidden" }}>
                 <SelectValue
                   placeholder={localeMessages.selectionBar.fontFamily}
@@ -513,7 +561,7 @@ export const SelectionTextControls = ({
           </SelectItem>
         </SelectContent>
       </Select>
-      <div className="selectionbar-separator" />
+      <div className={SELECTIONBAR_SEPARATOR} />
       <Select
         open={activeSelectId === "text-font-size"}
         onOpenChange={(isOpen) => {
@@ -541,7 +589,7 @@ export const SelectionTextControls = ({
       >
         <Tooltip>
           <TooltipTrigger asChild>
-            <SelectTrigger style={{ gap: "0px" }}>
+            <SelectTrigger className={SELECT_TRIGGER} style={{ gap: "0px" }}>
               <span style={{ width: "0px", overflow: "hidden" }}>
                 <SelectValue placeholder="" />
               </span>
@@ -553,31 +601,31 @@ export const SelectionTextControls = ({
           </TooltipContent>
         </Tooltip>
         <SelectContent position="popper">
-          <SelectItem check={false} className="fontSize-item" value="16">
+          <SelectItem check={false} className={FONT_SIZE_ITEM} value="16">
             {localeMessages.fontSizes.small}
             <span style={{ opacity: 0.5, marginLeft: "auto", display: "flex" }}>
               16
             </span>
           </SelectItem>
-          <SelectItem check={false} className="fontSize-item" value="24">
+          <SelectItem check={false} className={FONT_SIZE_ITEM} value="24">
             {localeMessages.fontSizes.medium}
             <span style={{ opacity: 0.5, marginLeft: "auto", display: "flex" }}>
               24
             </span>
           </SelectItem>
-          <SelectItem check={false} className="fontSize-item" value="40">
+          <SelectItem check={false} className={FONT_SIZE_ITEM} value="40">
             {localeMessages.fontSizes.large}
             <span style={{ opacity: 0.5, marginLeft: "auto", display: "flex" }}>
               40
             </span>
           </SelectItem>
-          <SelectItem check={false} className="fontSize-item" value="64">
+          <SelectItem check={false} className={FONT_SIZE_ITEM} value="64">
             {localeMessages.fontSizes.extraLarge}
             <span style={{ opacity: 0.5, marginLeft: "auto", display: "flex" }}>
               64
             </span>
           </SelectItem>
-          <SelectItem check={false} className="fontSize-item" value="96">
+          <SelectItem check={false} className={FONT_SIZE_ITEM} value="96">
             {localeMessages.fontSizes.huge}
             <span style={{ opacity: 0.5, marginLeft: "auto", display: "flex" }}>
               96
@@ -602,8 +650,8 @@ export const SelectionTextControls = ({
           />
         </SelectContent>
       </Select>
-      <div className="selectionbar-separator" />
-      <div style={{ display: "flex" }}>
+      <div className={SELECTIONBAR_SEPARATOR} />
+      <div className="flex">
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -624,10 +672,8 @@ export const SelectionTextControls = ({
                   isBoldControlActive ? "200" : "700",
                 );
               }}
-              className={
-                "toggle-selectionbar-button" +
-                (isBoldControlActive ? " active" : "")
-              }
+              className={TOGGLE_SELECTIONBAR_BUTTON}
+              data-active={isBoldControlActive ? "true" : undefined}
             >
               <Bold />
             </button>
@@ -656,10 +702,8 @@ export const SelectionTextControls = ({
                   isItalicControlActive ? "normal" : "italic",
                 );
               }}
-              className={
-                "toggle-selectionbar-button" +
-                (isItalicControlActive ? " active" : "")
-              }
+              className={TOGGLE_SELECTIONBAR_BUTTON}
+              data-active={isItalicControlActive ? "true" : undefined}
             >
               <Italic />
             </button>
@@ -685,10 +729,8 @@ export const SelectionTextControls = ({
 
                 toggleStrikethroughForSelectedElements();
               }}
-              className={
-                "toggle-selectionbar-button" +
-                (isStrikethroughControlActive ? " active" : "")
-              }
+              className={TOGGLE_SELECTIONBAR_BUTTON}
+              data-active={isStrikethroughControlActive ? "true" : undefined}
             >
               <Strikethrough />
             </button>
@@ -700,7 +742,7 @@ export const SelectionTextControls = ({
             </p>
           </TooltipContent>
         </Tooltip>
-        <div className="selectionbar-separator" />
+        <div className={SELECTIONBAR_SEPARATOR} />
         <Select
           open={activeSelectId === "text-align"}
           onOpenChange={(isOpen) => {
@@ -762,7 +804,7 @@ export const SelectionTextControls = ({
         >
           <Tooltip>
             <TooltipTrigger asChild>
-              <SelectTrigger style={{ gap: "0px" }}>
+              <SelectTrigger className={SELECT_TRIGGER} style={{ gap: "0px" }}>
                 <span style={{ width: "0px", overflow: "hidden" }}>
                   <SelectValue placeholder="" />
                 </span>
@@ -781,13 +823,13 @@ export const SelectionTextControls = ({
           </Tooltip>
           <SelectContent
             position="popper"
-            className="drawo-colorselect-content"
+            className={COLORSELECT_CONTENT}
           >
             <Tooltip>
               <TooltipTrigger asChild>
                 <SelectItem
                   check={false}
-                  className="drawo-textAlign-item"
+                  className={TEXT_ALIGN_ITEM}
                   value="left"
                 >
                   <TextAlignLeft />
@@ -801,7 +843,7 @@ export const SelectionTextControls = ({
               <TooltipTrigger asChild>
                 <SelectItem
                   check={false}
-                  className="drawo-textAlign-item"
+                  className={TEXT_ALIGN_ITEM}
                   value="center"
                 >
                   <TextAlignCenter />
@@ -815,7 +857,7 @@ export const SelectionTextControls = ({
               <TooltipTrigger asChild>
                 <SelectItem
                   check={false}
-                  className="drawo-textAlign-item"
+                  className={TEXT_ALIGN_ITEM}
                   value="end"
                 >
                   <TextAlignRight />

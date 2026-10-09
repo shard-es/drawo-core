@@ -1,9 +1,4 @@
-import {
-  type CSSProperties,
-  type Dispatch,
-  type RefObject,
-  type SetStateAction,
-} from "react";
+import { type Dispatch, type RefObject, type SetStateAction } from "react";
 import Chrome from "@uiw/react-color-chrome";
 import {
   Select,
@@ -33,6 +28,49 @@ import {
   getSelectedLineElements,
   getSharedValue,
 } from "@features/canvas/selection/selectionState";
+
+/* The selection toolbar renders inside `.selection-toolbar`, which used to give
+ * every `select-trigger` descendant these dimensions. Reproduced per-trigger. */
+const SELECT_TRIGGER =
+  "inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 " +
+  "rounded-none border-none bg-transparent px-2.5 text-sm font-medium " +
+  "text-[color:var(--popover-dark-text,#f3f4f6)] shadow-none outline-none " +
+  "transition-colors duration-150 hover:bg-[rgba(255,255,255,0.05)] " +
+  /* The trailing chevron svg (radix renders it via SelectPrimitive.Icon). */
+  "[&>svg:last-child]:size-[14px] [&>svg:last-child]:ml-2 " +
+  "[&>svg:last-child]:pointer-events-none " +
+  "[&>svg:last-child]:text-[color:var(--popover-dark-text,#b8b8b8)]";
+
+/* Stroke-width trigger: inherits SELECT_TRIGGER and is centred at a fixed width.
+ * (`.tool-bar .draw-stroke-trigger` is scoped to `features/workspace`, so it does
+ * not reach this toolbar — the pointer cursor from SELECT_TRIGGER applies.) */
+const DRAW_STROKE_TRIGGER =
+  `${SELECT_TRIGGER} w-[78px] justify-center px-3`;
+
+/* Swatch rows inside the colour `SelectContent` were laid out by
+ * `.drawo-colorselect-content` (fit-to-content, children forced into a row). */
+const COLORSELECT_CONTENT = "w-fit! min-w-fit! [&_*]:flex-row!";
+
+/* One colour swatch button. */
+const COLORSELECT_ITEM =
+  "float-left w-fit shrink-0 cursor-pointer rounded-full bg-transparent " +
+  "p-[4px_1px]! transition-all duration-[0.1s] hover:scale-105";
+
+/* Vertical hairline between toolbar groups. */
+const SELECTIONBAR_SEPARATOR =
+  "my-auto ml-[5px] mr-1 h-5 w-px bg-[rgba(var(--darkborder-rgb,255,255,255),1)] opacity-20";
+
+/* One stroke-width option in the stroke `SelectContent`. */
+const DRAW_STROKE_SELECT_ITEM = "flex p-[7px_8px] [&_*]:w-full";
+
+/* The live stroke preview drawn inside a stroke-width trigger/option. */
+const DRAW_STROKE_OPTION_LINE_WRAP =
+  "flex items-center justify-center [&_svg]:h-auto [&_svg]:w-[180px]";
+
+/* The custom colour picker is hosted in a tooltip, so it must drop the tooltip's
+ * shadow and shift down clear of the toolbar. Both rules were `!important`
+ * because they compete with `.drawo-tooltip-content` on the same element. */
+const CONTENT_COLOR = "[box-shadow:none]! [transform:translateY(60px)]!";
 
 interface SelectionStrokeControlsProps {
   scene: Scene;
@@ -259,7 +297,7 @@ export const SelectionStrokeControls = ({
           </Tooltip>
           <SelectContent
             position="popper"
-            className="drawo-colorselect-content"
+            className={COLORSELECT_CONTENT}
           >
             <ColorSwatchPicker
               colors={strokeColors}
@@ -269,7 +307,7 @@ export const SelectionStrokeControls = ({
                 <SelectItem
                   key={color}
                   value={color}
-                  className="drawo-colorselect-item"
+                  className={COLORSELECT_ITEM}
                   check={false}
                   onPointerDown={
                     isMulti
@@ -299,10 +337,10 @@ export const SelectionStrokeControls = ({
 
       <Tooltip open={isCustomDrawColorPickerOpen}>
         <TooltipTrigger asChild>
-          <div className="selectionbar-separator" />
+          <div className={SELECTIONBAR_SEPARATOR} />
         </TooltipTrigger>
         <TooltipContent
-          className="drawo-content-color"
+          className={CONTENT_COLOR}
           side="bottom"
           style={{ background: "transparent" }}
         >
@@ -353,7 +391,7 @@ export const SelectionStrokeControls = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <SelectTrigger
-              className="draw-stroke-trigger"
+              className={DRAW_STROKE_TRIGGER}
               style={{ gap: "0px", width: "fit-content" }}
             >
               <span style={{ width: "0px", overflow: "hidden" }}>
@@ -361,7 +399,7 @@ export const SelectionStrokeControls = ({
                   placeholder={localeMessages.selectionBar.strokeWidth}
                 />
               </span>
-              <span className="draw-stroke-option-line-wrap">
+              <span className={DRAW_STROKE_OPTION_LINE_WRAP}>
                 {renderDrawStrokePreview(
                   strokePreviews,
                   Math.max(
@@ -384,9 +422,9 @@ export const SelectionStrokeControls = ({
               key={strokeWidth}
               check={false}
               value={String(strokeWidth)}
-              className="draw-stroke-select-item"
+              className={DRAW_STROKE_SELECT_ITEM}
             >
-              <span className="draw-stroke-option-line-wrap">
+              <span className={DRAW_STROKE_OPTION_LINE_WRAP}>
                 {renderDrawStrokePreview(strokePreviews, index)}
               </span>
             </SelectItem>
@@ -465,7 +503,7 @@ export const SelectionStrokeControls = ({
           </Tooltip>
           <SelectContent
             position="popper"
-            className="drawo-colorselect-content"
+            className={COLORSELECT_CONTENT}
           >
             <ColorSwatchPicker
               colors={strokeColors}
@@ -475,7 +513,7 @@ export const SelectionStrokeControls = ({
                 <SelectItem
                   key={color}
                   value={color}
-                  className="drawo-colorselect-item"
+                  className={COLORSELECT_ITEM}
                   check={false}
                   onPointerDown={
                     isMulti
@@ -509,10 +547,10 @@ export const SelectionStrokeControls = ({
 
       <Tooltip open={isCustomDrawColorPickerOpen}>
         <TooltipTrigger asChild>
-          <div className="selectionbar-separator" />
+          <div className={SELECTIONBAR_SEPARATOR} />
         </TooltipTrigger>
         <TooltipContent
-          className="drawo-content-color"
+          className={CONTENT_COLOR}
           side="bottom"
           style={{ background: "transparent" }}
         >
@@ -585,33 +623,15 @@ export const SelectionStrokeControls = ({
               return (
                 <SelectItem
                   key={`${name}-${i}-start`}
-                  className="arrowlinecap-selectitem"
+                  className="flex w-fit! items-center! justify-center! py-2!"
                   check={false}
-                  style={
-                    {
-                      cssText: `
-align-items: center!important;
-justify-content: center!important;
-width: fit-content!important
-display: flex;
-padding: 8px 0px!important;
-                      `,
-                    } as CSSProperties
-                  }
                   value={name}
                 >
                   <svg
                     width={prev.width / 2}
                     viewBox={prev.viewBox}
                     fill="none"
-                    style={
-                      {
-                        cssText: `
-                          scale: 0.8;
-                          transform: scaleX(-1)!important;
-                        `,
-                      } as CSSProperties
-                    }
+                    className="scale-[0.8] -scale-x-100"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
@@ -628,7 +648,7 @@ padding: 8px 0px!important;
           </SelectContent>
         </Select>
 
-        <div className="selectionbar-separator" />
+        <div className={SELECTIONBAR_SEPARATOR} />
 
         <Select
           open={activeSelectId === "line-end-cap"}
@@ -664,32 +684,15 @@ padding: 8px 0px!important;
               return (
                 <SelectItem
                   key={`${name}-${i}-end`}
-                  className="arrowlinecap-selectitem"
+                  className="flex w-fit! items-center! justify-center! py-2!"
                   check={false}
-                  style={
-                    {
-                      cssText: `
-align-items: center!important;
-justify-content: center!important;
-width: fit-content!important
-display: flex;
-padding: 8px 0px!important;
-                      `,
-                    } as CSSProperties
-                  }
                   value={name}
                 >
                   <svg
                     width={prev.width / 2}
                     viewBox={prev.viewBox}
                     fill="none"
-                    style={
-                      {
-                        cssText: `
-                          scale: 0.8;
-                        `,
-                      } as CSSProperties
-                    }
+                    className="scale-[0.8]"
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
@@ -731,7 +734,7 @@ padding: 8px 0px!important;
       <Tooltip>
         <TooltipTrigger asChild>
           <SelectTrigger
-            className="draw-stroke-trigger"
+            className={DRAW_STROKE_TRIGGER}
             style={{ gap: "0px", width: "fit-content" }}
           >
             <span style={{ width: "0px", overflow: "hidden" }}>
@@ -739,7 +742,7 @@ padding: 8px 0px!important;
                 placeholder={localeMessages.selectionBar.strokeWidth}
               />
             </span>
-            <span className="draw-stroke-option-line-wrap">
+            <span className={DRAW_STROKE_OPTION_LINE_WRAP}>
               {renderDrawStrokePreview(
                 DRAW_STROKE_PREVIEWS,
                 Math.max(
@@ -762,9 +765,9 @@ padding: 8px 0px!important;
             key={strokeWidth}
             check={false}
             value={String(strokeWidth)}
-            className="draw-stroke-select-item"
+            className={DRAW_STROKE_SELECT_ITEM}
           >
-            <span className="draw-stroke-option-line-wrap">
+            <span className={DRAW_STROKE_OPTION_LINE_WRAP}>
               {renderDrawStrokePreview(DRAW_STROKE_PREVIEWS, index)}
             </span>
           </SelectItem>
@@ -790,7 +793,7 @@ padding: 8px 0px!important;
       <div style={{ display: "flex", alignItems: "center", gap: 2 }}>
         {renderLineStrokeColorSelector()}
         {renderLineStrokeWidthSelector()}
-        <div className="selectionbar-separator" />
+        <div className={SELECTIONBAR_SEPARATOR} />
         {renderLineCapSelector()}
       </div>
     );

@@ -7,7 +7,7 @@ export interface DrawoProps {
   initialScene?: Scene;
   onSceneChange?: (scene: Scene) => void;
   tools?: Array<"select" | "pan" | "text" | "rectangle" | "circle" | "line" | "draw" | "image" | "laser">;
-  initialOpenTopbarPanel?: "music" | "timer" | "sidebar" | null;
+  initialOpenTopbarPanel?: "sidebar" | null;
   disablePersistence?: boolean;
   disableKeyboardShortcuts?: boolean;
   className?: string;
@@ -48,16 +48,12 @@ export interface DrawoTopBarProps {
   left?: ReactNode;
   /** Fully replace the right section content. When set, rightBefore/rightAfter are ignored. */
   right?: ReactNode;
-  /** Content inserted before the default right items (Timer, MusicBar, Sidebar). */
+  /** Content inserted before the default right items (SidebarLauncher). */
   rightBefore?: ReactNode;
-  /** Content inserted after the default right items (Timer, MusicBar, Sidebar). */
+  /** Content inserted after the default right items (SidebarLauncher). */
   rightAfter?: ReactNode;
   /** Show/hide the default MenuBar. Default: true */
   showMenuBar?: boolean;
-  /** Show/hide the default Timer in the right section. Default: true */
-  showTimer?: boolean;
-  /** Show/hide the default MusicBar in the right section. Default: true */
-  showMusicBar?: boolean;
   /** Show/hide the default Sidebar launcher in the right section. Default: true */
   showSidebarLauncher?: boolean;
   /** Extra props forwarded to the built-in MenuBar (only when showMenuBar=true) */
@@ -164,7 +160,7 @@ export interface DrawoContextValue {
   messages: LocaleMessages;
   interactionMode: "select" | "pan";
   drawingTool: NewElementType | "laser" | null;
-  openTopbarPanel: "music" | "timer" | "sidebar" | null;
+  openTopbarPanel: "sidebar" | null;
   canUndo: boolean;
   canRedo: boolean;
   props: DrawoProps;
@@ -174,7 +170,7 @@ export interface DrawoContextValue {
   dispatch: (action: { type: string;[key: string]: unknown }) => void;
   setInteractionMode: (mode: "select" | "pan") => void;
   setDrawingTool: (tool: NewElementType | "laser" | null) => void;
-  setOpenTopbarPanel: (panel: "music" | "timer" | "sidebar" | null | ((prev: "music" | "timer" | "sidebar" | null) => "music" | "timer" | "sidebar" | null)) => void;
+  setOpenTopbarPanel: (panel: "sidebar" | null | ((prev: "sidebar" | null) => "sidebar" | null)) => void;
   setLocale: (locale: "en_US" | "es_ES") => void;
   undo: () => void;
   redo: () => void;
@@ -258,7 +254,7 @@ export function DrawoUndoBar(): JSX.Element;
 export function DrawoZoomBar(): JSX.Element;
 export function DrawoEmptyState(props: DrawoEmptyStateProps): JSX.Element;
 
-/** Default right-side content: Timer + MusicBar + SidebarLauncher. */
+/** Default right-side content: SidebarLauncher. */
 export function DefaultTopBarRight(): JSX.Element;
 /** Default MenuBar wired to Drawo context. Accepts MenuBar slot props. */
 export function DefaultMenuBar(props?: Omit<
@@ -273,15 +269,8 @@ export function DefaultMenuBar(props?: Omit<
   | "onExportImage"
   | "onOpenProject"
 >): JSX.Element;
-/** Default Timer wired to Drawo context. */
-export function DefaultTimer(): JSX.Element;
-/** Default MusicBar wired to Drawo context. */
-export function DefaultMusicBar(): JSX.Element;
 /** Default Sidebar launcher button wired to Drawo context. */
 export function DefaultSidebarLauncher(): JSX.Element;
-
-export function Timer(props: { isOpen: boolean; onOpenChange: (next: boolean) => void; messages: LocaleMessages }): JSX.Element;
-export function MusicBar(props: { isOpen: boolean; onOpenChange: (next: boolean) => void; messages: LocaleMessages }): JSX.Element;
 
 export function MenuBar(props: MenuBarProps): JSX.Element;
 export function ToolBar(props: Record<string, unknown>): JSX.Element;

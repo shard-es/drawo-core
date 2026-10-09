@@ -2,8 +2,6 @@ import { type ReactNode } from "react";
 import { useDrawo } from "../context";
 import { MenuBar } from "@features/workspace/components/MenuBar";
 import type { MenuBarProps } from "@features/workspace/components/MenuBar";
-import { Timer } from "@features/timer/components/Timer";
-import { MusicBar } from "@features/music/components/MusicBar";
 import { SidebarMinimalistic } from "@solar-icons/react";
 
 // ---------------------------------------------------------------------------
@@ -67,44 +65,6 @@ export function DefaultMenuBar(
 DefaultMenuBar.displayName = "DefaultMenuBar";
 
 /**
- * Renders the default Timer wired to the Drawo context.
- */
-export function DefaultTimer() {
-  const { messages, openTopbarPanel, setOpenTopbarPanel } = useDrawo();
-
-  return (
-    <Timer
-      messages={messages}
-      isOpen={openTopbarPanel === "timer"}
-      onOpenChange={(nextIsOpen) =>
-        setOpenTopbarPanel(nextIsOpen ? "timer" : null)
-      }
-    />
-  );
-}
-
-DefaultTimer.displayName = "DefaultTimer";
-
-/**
- * Renders the default MusicBar wired to the Drawo context.
- */
-export function DefaultMusicBar() {
-  const { messages, openTopbarPanel, setOpenTopbarPanel } = useDrawo();
-
-  return (
-    <MusicBar
-      messages={messages}
-      isOpen={openTopbarPanel === "music"}
-      onOpenChange={(nextIsOpen) =>
-        setOpenTopbarPanel(nextIsOpen ? "music" : null)
-      }
-    />
-  );
-}
-
-DefaultMusicBar.displayName = "DefaultMusicBar";
-
-/**
  * Renders the default Sidebar launcher button wired to the Drawo context.
  */
 export function DefaultSidebarLauncher() {
@@ -112,12 +72,10 @@ export function DefaultSidebarLauncher() {
   const isSidebarOpen = openTopbarPanel === "sidebar";
 
   return (
-    <div
-      className={`sidebar-launcher-wrap ${isSidebarOpen ? "active" : ""}`}
-    >
+    <div className={`relative ${isSidebarOpen ? "active" : ""} [&::after]:hidden`}>
       <button
         type="button"
-        className="sidebar-launcher"
+        className="relative flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-(--panel-border) bg-(--panel-bg) text-[rgb(var(--text-rgb))] shadow-(--panel-shadow) backdrop-blur-lg transition-all duration-200 [corner-shape:squircle] hover:brightness-95 dark:hover:brightness-130 dark:[.active_&]:border-transparent dark:[.active_&]:bg-(--accent) dark:[.active_&]:text-white [&>*]:scale-[1.3]"
         onClick={() =>
           setOpenTopbarPanel((current) =>
             current === "sidebar" ? null : "sidebar",
@@ -136,14 +94,12 @@ export function DefaultSidebarLauncher() {
 DefaultSidebarLauncher.displayName = "DefaultSidebarLauncher";
 
 /**
- * Renders all default right-side items: Timer, MusicBar, SidebarLauncher.
+ * Renders all default right-side items: SidebarLauncher.
  * Use this when you want the full default right section as a single component.
  */
 export function DefaultTopBarRight() {
   return (
     <>
-      <DefaultTimer />
-      <DefaultMusicBar />
       <DefaultSidebarLauncher />
     </>
   );
@@ -164,16 +120,12 @@ export interface DrawoTopBarProps {
    * When set, `rightBefore` and `rightAfter` are ignored.
    */
   right?: ReactNode;
-  /** Content inserted *before* the default right items (Timer, MusicBar, Sidebar). */
+  /** Content inserted *before* the default right items (SidebarLauncher). */
   rightBefore?: ReactNode;
-  /** Content inserted *after* the default right items (Timer, MusicBar, Sidebar). */
+  /** Content inserted *after* the default right items (SidebarLauncher). */
   rightAfter?: ReactNode;
   /** Show/hide the default MenuBar. Default: true */
   showMenuBar?: boolean;
-  /** Show/hide the default Timer in the right section. Default: true */
-  showTimer?: boolean;
-  /** Show/hide the default MusicBar in the right section. Default: true */
-  showMusicBar?: boolean;
   /** Show/hide the default Sidebar launcher in the right section. Default: true */
   showSidebarLauncher?: boolean;
   /** Extra props forwarded to the built-in MenuBar (only when showMenuBar=true) */
@@ -198,8 +150,6 @@ export function DrawoTopBar({
   rightBefore,
   rightAfter,
   showMenuBar = true,
-  showTimer = true,
-  showMusicBar = true,
   showSidebarLauncher = true,
   menuBarProps,
 }: DrawoTopBarProps) {
@@ -209,21 +159,21 @@ export function DrawoTopBar({
     ) : (
       <>
         {rightBefore}
-        {showTimer && <DefaultTimer />}
-        {showMusicBar && <DefaultMusicBar />}
         {showSidebarLauncher && <DefaultSidebarLauncher />}
         {rightAfter}
       </>
     );
 
   return (
-    <div className="drawo-topbar">
-      <div className="drawo-topbar-left">
+    <div className="absolute inset-x-0 top-0 z-20 flex w-full items-start justify-between overflow-visible p-3">
+      <div className="flex gap-2">
         {children}
         {showMenuBar && <DefaultMenuBar {...menuBarProps} />}
         {left}
       </div>
-      <div className="drawo-topbar-right">{rightContent}</div>
+      <div className="flex items-center gap-2 [&>div]:relative [&>div]:z-[1000] [&>div]:transition-[translate_0.2s_ease-in-out] [&>div:last-child]:duration-[0.4s] [&>div::before]:absolute [&>div::before]:bottom-full [&>div::before]:left-0 [&>div::before]:z-100 [&>div::before]:h-[200%] [&>div::before]:w-full [&>div::before]:cursor-pointer [&>div::before]:content-[''] [&>div::after]:absolute [&>div::after]:top-full [&>div::after]:left-0 [&>div::after]:z-100 [&>div::after]:h-[200%] [&>div::after]:w-full [&>div::after]:content-[''] [.drawo-presentation-mode_&>div:not(:hover):not(.active)]:-translate-y-[200%] [.drawo-zen-mode_&>div::after]:pointer-events-auto">
+        {rightContent}
+      </div>
     </div>
   );
 }

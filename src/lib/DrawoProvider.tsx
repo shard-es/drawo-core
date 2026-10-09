@@ -46,7 +46,6 @@ import {
   LOCALE_STORAGE_KEY,
   SCENE_STORAGE_KEY,
   SETTINGS_STORAGE_KEY,
-  TIMER_STORAGE_KEY,
   TOPBAR_OPEN_PANEL_STORAGE_KEY,
 } from "@app/state/constants";
 import {
@@ -86,9 +85,12 @@ interface DrawoProjectCommonFields {
   exportedAt: string;
   safeScene: Scene;
   locale: LocaleCode;
+  /**
+   * Only "sidebar" | null are written on export. Older files may hold
+   * legacy "music" | "timer" values; they are accepted on import and
+   * ignored (mapped to null) since those panels no longer exist.
+   */
   openTopbarPanel: "music" | "timer" | "sidebar" | null;
-  timerState: string | null;
-  musicBarState?: string | null;
 }
 
 interface DrawoProjectFileV1 extends DrawoProjectCommonFields {
@@ -118,12 +120,7 @@ const isDrawoProjectCommonFields = (
     (candidate.openTopbarPanel === "music" ||
       candidate.openTopbarPanel === "timer" ||
       candidate.openTopbarPanel === "sidebar" ||
-      candidate.openTopbarPanel === null) &&
-    (typeof candidate.timerState === "string" ||
-      candidate.timerState === null) &&
-    (typeof candidate.musicBarState === "undefined" ||
-      typeof candidate.musicBarState === "string" ||
-      candidate.musicBarState === null)
+      candidate.openTopbarPanel === null)
   );
 };
 
@@ -283,16 +280,14 @@ export function DrawoProvider({
   onThemeChange,
 }: DrawoProps & { children: React.ReactNode }) {
   const [openTopbarPanel, setOpenTopbarPanel] = useState<
-    "music" | "timer" | "sidebar" | null
+    "sidebar" | null
   >(() => {
     if (initialOpenTopbarPanel !== undefined) {
       return initialOpenTopbarPanel;
     }
     try {
       const stored = localStorage.getItem(TOPBAR_OPEN_PANEL_STORAGE_KEY);
-      return stored === "music" || stored === "timer" || stored === "sidebar"
-        ? stored
-        : null;
+      return stored === "sidebar" ? stored : null;
     } catch {
       return null;
     }
@@ -793,7 +788,6 @@ export function DrawoProvider({
       safeScene: exportableScene,
       locale,
       openTopbarPanel,
-      timerState: localStorage.getItem(TIMER_STORAGE_KEY),
     };
     const serializedPayload = [
       DRAWO_PROJECT_AI_PROMPT_LINE,
@@ -900,19 +894,14 @@ export function DrawoProvider({
         );
         localStorage.setItem(LOCALE_STORAGE_KEY, parsed.locale);
 
-        if (parsed.openTopbarPanel) {
+        if (parsed.openTopbarPanel === "sidebar") {
+          // Legacy "music"/"timer" values from old files are dropped here.
           localStorage.setItem(
             TOPBAR_OPEN_PANEL_STORAGE_KEY,
             parsed.openTopbarPanel,
           );
         } else {
           localStorage.removeItem(TOPBAR_OPEN_PANEL_STORAGE_KEY);
-        }
-
-        if (parsed.timerState) {
-          localStorage.setItem(TIMER_STORAGE_KEY, parsed.timerState);
-        } else {
-          localStorage.removeItem(TIMER_STORAGE_KEY);
         }
       } catch {
         throw new Error("storage-quota-exceeded");

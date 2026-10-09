@@ -198,7 +198,7 @@ interface UseAppKeyboardShortcutsProps {
   setInteractionMode: Dispatch<SetStateAction<"select" | "pan">>;
   setDrawingTool: Dispatch<SetStateAction<NewElementType | "laser" | null>>;
   setOpenTopbarPanel: Dispatch<
-    SetStateAction<"music" | "timer" | "sidebar" | null>
+    SetStateAction<"sidebar" | null>
   >;
 }
 

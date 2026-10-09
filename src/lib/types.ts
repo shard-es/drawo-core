@@ -36,7 +36,7 @@ export interface DrawoProps {
     | "image"
     | "laser"
   >;
-  initialOpenTopbarPanel?: "music" | "timer" | "sidebar" | null;
+  initialOpenTopbarPanel?: "sidebar" | null;
   disablePersistence?: boolean;
   disableKeyboardShortcuts?: boolean;
   className?: string;
@@ -72,7 +72,7 @@ export interface DrawoContextValue {
   messages: LocaleMessages;
   interactionMode: "select" | "pan";
   drawingTool: NewElementType | "laser" | null;
-  openTopbarPanel: "music" | "timer" | "sidebar" | null;
+  openTopbarPanel: "sidebar" | null;
   canUndo: boolean;
   canRedo: boolean;
   emptyStateConfig: DrawoEmptyStateConfig;
@@ -85,13 +85,9 @@ export interface DrawoContextValue {
   setDrawingTool: (tool: NewElementType | "laser" | null) => void;
   setOpenTopbarPanel: (
     panel:
-      | "music"
-      | "timer"
       | "sidebar"
       | null
-      | ((
-          prev: "music" | "timer" | "sidebar" | null,
-        ) => "music" | "timer" | "sidebar" | null),
+      | ((prev: "sidebar" | null) => "sidebar" | null),
   ) => void;
   setLocale: (locale: LocaleCode) => void;
   undo: () => void;

@@ -16,7 +16,7 @@ export interface DrawoContextValue {
   messages: LocaleMessages;
   interactionMode: "select" | "pan";
   drawingTool: NewElementType | "laser" | null;
-  openTopbarPanel: "music" | "timer" | "sidebar" | null;
+  openTopbarPanel: "sidebar" | null;
   canUndo: boolean;
   canRedo: boolean;
   emptyStateConfig: DrawoEmptyStateConfig;
@@ -28,7 +28,7 @@ export interface DrawoContextValue {
   setInteractionMode: (mode: "select" | "pan") => void;
   setDrawingTool: (tool: NewElementType | "laser" | null) => void;
   setOpenTopbarPanel: (
-    panel: "music" | "timer" | "sidebar" | null | ((prev: "music" | "timer" | "sidebar" | null) => "music" | "timer" | "sidebar" | null)
+    panel: "sidebar" | null | ((prev: "sidebar" | null) => "sidebar" | null)
   ) => void;
   setLocale: (locale: LocaleCode) => void;
   undo: () => void;

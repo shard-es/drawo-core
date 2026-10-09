@@ -56,6 +56,62 @@ interface SelectionShapeControlsProps {
 
 type PickerMode = "fill" | "stroke" | null;
 
+/* The selection toolbar renders inside `.selection-toolbar`, which used to give
+ * every `select-trigger` descendant these dimensions. Reproduced per-trigger. */
+const SELECT_TRIGGER =
+  "inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 " +
+  "rounded-none border-none bg-transparent px-2.5 text-sm font-medium " +
+  "text-[color:var(--popover-dark-text,#f3f4f6)] shadow-none outline-none " +
+  "transition-colors duration-150 hover:bg-[rgba(255,255,255,0.05)] " +
+  /* The trailing chevron svg (radix renders it via SelectPrimitive.Icon). */
+  "[&>svg:last-child]:size-[14px] [&>svg:last-child]:ml-2 " +
+  "[&>svg:last-child]:pointer-events-none " +
+  "[&>svg:last-child]:text-[color:var(--popover-dark-text,#b8b8b8)]";
+
+/* Swatch rows inside the colour `SelectContent` were laid out by
+ * `.drawo-colorselect-content` (fit-to-content, children forced into a row). */
+const COLORSELECT_CONTENT = "w-fit! min-w-fit! [&_*]:flex-row!";
+
+/* One colour swatch button. */
+const COLORSELECT_ITEM =
+  "float-left w-fit shrink-0 cursor-pointer rounded-full bg-transparent " +
+  "p-[4px_1px]! transition-all duration-[0.1s] hover:scale-105";
+
+/* Vertical hairline between toolbar groups. */
+const SELECTIONBAR_SEPARATOR =
+  "my-auto ml-[5px] mr-1 h-5 w-px bg-[rgba(var(--darkborder-rgb,255,255,255),1)] opacity-20";
+
+/* The fill/stroke-style radio row that heads each colour dropdown. */
+const COLORSTYLE_CONTAINER = "flex";
+
+/* One fill/stroke-style option. Selected state is applied as a background via
+ * the `bg-[rgba(var(--accent-rgb),0.5)]` utility in the JSX below, matching the
+ * accent tint of `.drawo-colorstyle-optionitem.active`. The inner span (radix
+ * `ItemText`, plus the check indicator) was laid out by
+ * `.drawo-colorstyle-container .drawo-colorstyle-optionitem span`. */
+const COLORSTYLE_OPTION_ITEM = "[&_span]:flex [&_span]:items-center [&_span]:gap-1.5";
+
+/* Hairline under the style row inside a colour dropdown. */
+const COLORSTYLE_SEPARATOR =
+  "mx-auto my-0.5 mt-2 h-px w-[95%] border-none bg-[rgba(var(--text-rgb),0.2)]";
+
+/* The swatch grid that heads the fill dropdown. `.drawo-bigcolorpicker` used to
+ * be `padding: 12px 8px 8px` + flex column, centered both ways. */
+const BIGCOLORPICKER = "flex flex-col items-center justify-center px-2 pb-2 pt-3";
+/* Each row div inside it was `display:flex; align-items:center;
+ * justify-content:center`, and every descendant had its padding zeroed
+ * (`padding: 0 !important`) — reproduced with a descendant selector. */
+const BIGCOLORPICKER_ROW = "flex items-center justify-center [&_*]:p-0!";
+
+/* The fill/stroke colour pickers are hosted in tooltips, so they must drop the
+ * tooltip shadow and shift down clear of the toolbar. Both rules were
+ * `!important` because they compete with `.drawo-tooltip-content` on the same
+ * element; the two slots sit at different offsets. */
+const CONTENT_COLOR_ULTRA_1 =
+  "[box-shadow:none]! [transform:translateY(138px)_translateX(18px)]!";
+const CONTENT_COLOR_ULTRA_2 =
+  "[box-shadow:none]! [transform:translateY(145px)_translateX(26px)]!";
+
 export const SelectionShapeControls = ({
   scene,
   shapeColors,
@@ -195,6 +251,7 @@ export const SelectionShapeControls = ({
           <Tooltip>
             <TooltipTrigger asChild>
               <SelectTrigger
+                className={SELECT_TRIGGER}
                 onPointerDown={(event) => {
                   if (fillColorSelectValue !== "multi") {
                     return;
@@ -228,13 +285,13 @@ export const SelectionShapeControls = ({
           </Tooltip>
           <SelectContent
             position="popper"
-            className="drawo-colorselect-content"
+            className={COLORSELECT_CONTENT}
           >
-            <div className="drawo-colorstyle-container">
+            <div className={COLORSTYLE_CONTAINER}>
               <SelectItem
                 className={
-                  "drawo-colorstyle-optionitem" +
-                  (fillStyleSelectValue === "solid" ? " active" : "")
+                  COLORSTYLE_OPTION_ITEM +
+                  (fillStyleSelectValue === "solid" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
                 }
                 value="solid"
               >
@@ -242,8 +299,8 @@ export const SelectionShapeControls = ({
               </SelectItem>
               <SelectItem
                 className={
-                  "drawo-colorstyle-optionitem" +
-                  (fillStyleSelectValue === "hachure" ? " active" : "")
+                  COLORSTYLE_OPTION_ITEM +
+                  (fillStyleSelectValue === "hachure" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
                 }
                 value="hachure"
               >
@@ -251,22 +308,20 @@ export const SelectionShapeControls = ({
               </SelectItem>
               <SelectItem
                 className={
-                  "drawo-colorstyle-optionitem" +
-                  (fillStyleSelectValue === "none" ? " active" : "")
+                  COLORSTYLE_OPTION_ITEM +
+                  (fillStyleSelectValue === "none" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
                 }
                 value="none"
               >
                 <SquareUnfilledIcon /> Sin relleno
               </SelectItem>
             </div>
-            <hr className="drawo-colorstyle-separator" />
+            <hr className={COLORSTYLE_SEPARATOR} />
             <div
-              className={
-                "drawo-bigcolorpicker " +
-                (fillStyleSelectValue === "none" ? "disabled" : "")
-              }
+              className={BIGCOLORPICKER}
+              data-disabled={fillStyleSelectValue === "none" ? "" : undefined}
             >
-              <div>
+              <div className={BIGCOLORPICKER_ROW}>
                 <ColorSwatchPicker
                   colors={shapeColors[0]}
                   currentColor={selectedFillPreviewColor}
@@ -275,7 +330,7 @@ export const SelectionShapeControls = ({
                     <SelectItem
                       key={color}
                       value={color}
-                      className="drawo-colorselect-item"
+                      className={COLORSELECT_ITEM}
                       check={false}
                       onPointerDown={
                         isMulti
@@ -303,7 +358,7 @@ export const SelectionShapeControls = ({
                   )}
                 />
               </div>
-              <div>
+              <div className={BIGCOLORPICKER_ROW}>
                 <ColorSwatchPicker
                   colors={shapeColors[1]}
                   realTotalColors={fillPalette}
@@ -313,7 +368,7 @@ export const SelectionShapeControls = ({
                     <SelectItem
                       key={color}
                       value={color}
-                      className="drawo-colorselect-item"
+                      className={COLORSELECT_ITEM}
                       check={false}
                       onPointerDown={
                         isMulti
@@ -353,10 +408,10 @@ export const SelectionShapeControls = ({
         }
       >
         <TooltipTrigger asChild>
-          <div className="selectionbar-separator" />
+          <div className={SELECTIONBAR_SEPARATOR} />
         </TooltipTrigger>
         <TooltipContent
-          className="drawo-content-color drawo-ultrainferior-colorcontent"
+          className={CONTENT_COLOR_ULTRA_1}
           side="bottom"
           style={{ background: "transparent" }}
         >
@@ -422,6 +477,7 @@ export const SelectionShapeControls = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <SelectTrigger
+              className={SELECT_TRIGGER}
               onPointerDown={(event) => {
                 if (strokeColorSelectValue !== "multi") {
                   return;
@@ -453,12 +509,12 @@ export const SelectionShapeControls = ({
             <p>{localeMessages.selectionBar.strokeColor}</p>
           </TooltipContent>
         </Tooltip>
-        <SelectContent position="popper" className="drawo-colorselect-content">
-          <div className="drawo-colorstyle-container">
+        <SelectContent position="popper" className={COLORSELECT_CONTENT}>
+          <div className={COLORSTYLE_CONTAINER}>
             <SelectItem
               className={
-                "drawo-colorstyle-optionitem" +
-                (strokeStyleSelectValue === "solid" ? " active" : "")
+                COLORSTYLE_OPTION_ITEM +
+                (strokeStyleSelectValue === "solid" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
               }
               value="solid"
             >
@@ -466,8 +522,8 @@ export const SelectionShapeControls = ({
             </SelectItem>
             <SelectItem
               className={
-                "drawo-colorstyle-optionitem" +
-                (strokeStyleSelectValue === "dashed" ? " active" : "")
+                COLORSTYLE_OPTION_ITEM +
+                (strokeStyleSelectValue === "dashed" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
               }
               value="dashed"
             >
@@ -475,15 +531,15 @@ export const SelectionShapeControls = ({
             </SelectItem>
             <SelectItem
               className={
-                "drawo-colorstyle-optionitem" +
-                (strokeStyleSelectValue === "none" ? " active" : "")
+                COLORSTYLE_OPTION_ITEM +
+                (strokeStyleSelectValue === "none" ? " bg-[rgba(var(--accent-rgb),0.5)]" : "")
               }
               value="none"
             >
               <OctagonXIcon /> Ninguno
             </SelectItem>
           </div>
-          <hr className="drawo-colorstyle-separator" />
+          <hr className={COLORSTYLE_SEPARATOR} />
           <div>
             <ColorSwatchPicker
               colors={shapeColors[0]}
@@ -493,7 +549,7 @@ export const SelectionShapeControls = ({
                 <SelectItem
                   key={color}
                   value={color}
-                  className="drawo-colorselect-item"
+                  className={COLORSELECT_ITEM}
                   check={false}
                   onPointerDown={
                     isMulti
@@ -531,7 +587,7 @@ export const SelectionShapeControls = ({
                 <SelectItem
                   key={color}
                   value={color}
-                  className="drawo-colorselect-item"
+                  className={COLORSELECT_ITEM}
                   check={false}
                   onPointerDown={
                     isMulti
@@ -572,7 +628,7 @@ export const SelectionShapeControls = ({
           <div />
         </TooltipTrigger>
         <TooltipContent
-          className="drawo-content-color drawo-ultrainferior-colorcontent2"
+          className={CONTENT_COLOR_ULTRA_2}
           side="bottom"
           style={{ background: "transparent" }}
         >

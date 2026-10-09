@@ -54,8 +54,10 @@ export const TextEditorOverlay = ({
       return false;
     }
 
+    /* The toolbar carries `[data-selection-toolbar]` (its old `.selection-toolbar`
+     * class only carried styling, and is now Tailwind utilities instead). */
     return Boolean(
-      activeElement.closest(".selection-toolbar") ||
+      activeElement.closest("[data-selection-toolbar]") ||
         activeElement.closest(".select-content") ||
         activeElement.closest('[data-slot="select-content"]') ||
         activeElement.closest('[data-slot="select-trigger"]'),
@@ -183,7 +185,7 @@ export const TextEditorOverlay = ({
         onChange={onEditorChange}
       >
         <Editable
-          className="canvas-text-editor-input"
+          className="[&::selection]:bg-[rgba(59,130,246,0.34)] [&::selection]:text-inherit [&::selection]:[-webkit-text-fill-color:currentColor] [&_*::selection]:bg-[rgba(59,130,246,0.34)] dark:[&::selection]:bg-[rgba(148,189,255,0.32)] dark:[&_*::selection]:bg-[rgba(148,189,255,0.32)]"
           renderLeaf={renderLeaf}
           onBlur={handleInputBlur}
           onKeyDown={handleInputKeyDown}

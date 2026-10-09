@@ -138,11 +138,6 @@ export interface LocaleMessages {
     };
     textColor: string;
   };
-  panels: {
-    playing: string;
-    music: string;
-    timer: string;
-  };
   canvas: {
     newText: string;
     tagline: string;

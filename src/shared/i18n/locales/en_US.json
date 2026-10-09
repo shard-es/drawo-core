@@ -133,11 +133,6 @@
     },
     "textColor": "Text color"
   },
-  "panels": {
-    "playing": "(playing)",
-    "music": "Music",
-    "timer": "Timer"
-  },
   "canvas": {
     "newText": "New text",
     "tagline": "Your drawings are saved locally in your browser's storage.",

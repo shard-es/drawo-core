@@ -1,4 +1,5 @@
 export { Drawo } from "./Drawo";
+import "./tailwind.css";
 export { useDrawo } from "./context";
 export { DrawoProvider } from "./DrawoProvider";
 export type {
@@ -8,14 +9,10 @@ export type {
 } from "./types";
 export type { ResolvedTheme } from "./theme";
 
-export { Timer, MusicBar } from "./optional";
-
 export {
   DrawoTopBar,
   DefaultTopBarRight,
   DefaultMenuBar,
-  DefaultTimer,
-  DefaultMusicBar,
   DefaultSidebarLauncher,
 } from "./components/DrawoTopBar";
 export type { DrawoTopBarProps } from "./components/DrawoTopBar";

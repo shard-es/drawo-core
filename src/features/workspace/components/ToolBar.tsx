@@ -62,6 +62,21 @@ interface ToolBarProps {
   onSelectImageFiles: (files: File[]) => void;
 }
 
+const TOOL_ITEM_BASE_CLASS =
+  "flex h-10 w-10 cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center rounded-[10px] border-none bg-transparent p-[10px] text-[13px] font-medium text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] dark:text-[#e5e7eb] [&_svg]:size-5";
+
+const TOOL_ITEM_ACTIVE_CLASS =
+  "bg-(--accent) text-white dark:bg-(--accent-dark)";
+
+const toolItemClass = (active: boolean) =>
+  TOOL_ITEM_BASE_CLASS + (active ? " " + TOOL_ITEM_ACTIVE_CLASS : "");
+
+const TOOL_SEPARATOR_CLASS =
+  "mx-1 my-auto h-5 w-px border-l border-[rgb(var(--text-rgb))] opacity-30";
+
+const STROKE_PREVIEW_WRAP_CLASS =
+  "flex items-center justify-center [&_svg]:h-auto [&_svg]:w-[180px]";
+
 export const ToolBar = ({
   interactionMode,
   drawingTool,
@@ -167,7 +182,7 @@ export const ToolBar = ({
 
   const drawTools = ["draw", "marker", "quill"];
   return (
-    <div className="tool-bar">
+    <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-px rounded-[15px] border border-(--panel-border) bg-(--panel-bg) p-2 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle] [.drawo-presentation-mode_&]:translate-y-[200%]">
       <input
         ref={imageInputRef}
         type="file"
@@ -187,12 +202,12 @@ export const ToolBar = ({
         }}
       />
       {drawTools.includes(drawingTool) ? (
-        <div className="top-toolbar">
+        <div className="absolute bottom-full left-1/2 z-10 flex -translate-x-1/2 -translate-y-2 items-center gap-px rounded-[15px] border border-(--panel-border) bg-(--panel-bg) p-1 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle]">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
                 type="button"
-                className={`drawtool-elem tool-item${drawingTool === "draw" ? " active" : ""}`}
+                className={`${toolItemClass(drawingTool === "draw")} group overflow-hidden`}
                 onClick={() => {
                   setInteractionModeSafely("select");
                   setDrawingToolSafely("draw");
@@ -201,7 +216,7 @@ export const ToolBar = ({
               >
                 <PenIcon
                   color={uniColor(drawDefaults.drawStroke)}
-                  className="drawtool-icon"
+                  className="scale-[2] translate-y-[2px] transition-[0.1s] group-hover:translate-y-0"
                 />
               </button>
             </TooltipTrigger>
@@ -213,7 +228,7 @@ export const ToolBar = ({
             <TooltipTrigger asChild>
               <button
                 type="button"
-                className={`drawtool-elem tool-item${drawingTool === "quill" ? " active" : ""}`}
+                className={`${toolItemClass(drawingTool === "quill")} group overflow-hidden`}
                 onClick={() => {
                   setInteractionModeSafely("select");
                   setDrawingToolSafely("quill");
@@ -222,7 +237,7 @@ export const ToolBar = ({
               >
                 <QuillIcon
                   color={uniColor(drawDefaults.quillStroke)}
-                  className="drawtool-icon "
+                  className="scale-[2] translate-y-[2px] transition-[0.1s] group-hover:translate-y-0"
                 />
               </button>
             </TooltipTrigger>
@@ -234,7 +249,7 @@ export const ToolBar = ({
             <TooltipTrigger asChild>
               <button
                 type="button"
-                className={`drawtool-elem tool-item${drawingTool === "marker" ? " active" : ""}`}
+                className={`${toolItemClass(drawingTool === "marker")} group overflow-hidden`}
                 onClick={() => {
                   setInteractionModeSafely("select");
                   setDrawingToolSafely("marker");
@@ -243,7 +258,7 @@ export const ToolBar = ({
               >
                 <MarkerIcon
                   color={uniColor(drawDefaults.markerStroke)}
-                  className="drawtool-icon"
+                  className="scale-[2] translate-y-[2px] transition-[0.1s] group-hover:translate-y-0"
                 />
               </button>
             </TooltipTrigger>
@@ -251,7 +266,7 @@ export const ToolBar = ({
               <p>{messages.toolNames.marker}</p>
             </TooltipContent>
           </Tooltip>
-          <div className="tool-separator" />
+          <div className={TOOL_SEPARATOR_CLASS} />
           <ColorSwatchPicker
             colors={strokeColors}
             currentColor={currentColor}
@@ -259,7 +274,7 @@ export const ToolBar = ({
             renderItem={({ color, swatch }) => (
               <div
                 key={color}
-                className="drawo-colorselect-item"
+                className="float-left w-fit shrink-0 rounded-full bg-transparent p-[4px_1px]! transition-[0.1s] hover:scale-105"
                 onClick={() => {
                   if (color === "multi") {
                     setIsColorPickerOpen((current) => !current);
@@ -282,7 +297,7 @@ export const ToolBar = ({
               <span style={{ opacity: 0 }}>.</span>
             </TooltipTrigger>
             <TooltipContent
-              className="drawo-content-color inferior"
+              className="drawo-content-color inferior shadow-none ![transform:translateY(-20px)]"
               side="bottom"
               style={{ background: "transparent", padding: 0 }}
               onPointerDown={(event) => event.stopPropagation()}
@@ -291,7 +306,7 @@ export const ToolBar = ({
             </TooltipContent>
           </Tooltip>
 
-          <div className="tool-separator" />
+          <div className={TOOL_SEPARATOR_CLASS} />
 
           <Select
             value={String(
@@ -310,13 +325,9 @@ export const ToolBar = ({
               <TooltipTrigger asChild>
                 <SelectTrigger
                   noArrow
-                  className="draw-stroke-trigger"
-                  style={{
-                    gap: "0px",
-                    width: "fit-content",
-                  }}
+                  className="flex h-10 w-[94.7px] cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center gap-0 rounded-[24px] border-none bg-transparent p-3 text-current shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] [corner-shape:squircle]"
                 >
-                  <span className="draw-stroke-option-line-wrap">
+                  <span className={`${STROKE_PREVIEW_WRAP_CLASS} [&_svg]:[transform:scaleX(0.4)_translateX(-76%)]`}>
                     {(() => {
                       const currentWidth =
                         drawingTool === "marker"
@@ -345,9 +356,9 @@ export const ToolBar = ({
                   key={strokeWidth}
                   check={false}
                   value={String(strokeWidth)}
-                  className="draw-stroke-select-item"
+                  className="flex p-[7px_8px]! [&_*]:w-full"
                 >
-                  <span className="draw-stroke-option-line-wrap">
+                  <span className={STROKE_PREVIEW_WRAP_CLASS}>
                     {renderDrawStrokePreview(strokePreviews, index)}
                   </span>
                 </SelectItem>
@@ -362,7 +373,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${interactionMode === "select" && !drawingTool ? " active" : ""}`}
+            className={toolItemClass(interactionMode === "select" && !drawingTool)}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely(null);
@@ -385,7 +396,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${interactionMode === "pan" ? " active" : ""}`}
+            className={toolItemClass(interactionMode === "pan")}
             onClick={() => {
               setInteractionModeSafely("pan");
               setDrawingToolSafely(null);
@@ -399,13 +410,13 @@ export const ToolBar = ({
         </TooltipContent>
       </Tooltip>
 
-      <div className="tool-separator" />
+      <div className={TOOL_SEPARATOR_CLASS} />
 
       <Tooltip>
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawingTool === "text" ? " active" : ""}`}
+            className={toolItemClass(drawingTool === "text")}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("text");
@@ -423,7 +434,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawingTool === "rectangle" ? " active" : ""}`}
+            className={toolItemClass(drawingTool === "rectangle")}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("rectangle");
@@ -441,7 +452,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawingTool === "circle" ? " active" : ""}`}
+            className={toolItemClass(drawingTool === "circle")}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("circle");
@@ -459,7 +470,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawingTool === "line" ? " active" : ""}`}
+            className={toolItemClass(drawingTool === "line")}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("line");
@@ -477,7 +488,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawTools.includes(drawingTool) ? " active" : ""}`}
+            className={toolItemClass(drawTools.includes(drawingTool))}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("draw");
@@ -494,7 +505,7 @@ export const ToolBar = ({
         <TooltipTrigger asChild>
           <button
             type="button"
-            className="tool-item"
+            className={TOOL_ITEM_BASE_CLASS}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely(null);
@@ -509,13 +520,13 @@ export const ToolBar = ({
         </TooltipContent>
       </Tooltip>
 
-      <div className="tool-separator" />
+      <div className={TOOL_SEPARATOR_CLASS} />
 
       <Tooltip>
         <TooltipTrigger asChild>
           <button
             type="button"
-            className={`tool-item${drawingTool === "laser" ? " active" : ""}`}
+            className={toolItemClass(drawingTool === "laser")}
             onClick={() => {
               setInteractionModeSafely("select");
               setDrawingToolSafely("laser");

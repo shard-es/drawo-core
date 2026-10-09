@@ -35,7 +35,6 @@ import { CanvasView } from "@features/canvas/view/CanvasView";
 import { TooltipProvider } from "@shared/ui/tooltip";
 import { MenuBar } from "@features/workspace/components/MenuBar";
 import { ToolBar } from "@features/workspace/components/ToolBar";
-import { MusicBar } from "@features/music/components/MusicBar";
 import { useWorkspaceKeyboardShortcuts } from "@features/workspace/hooks/useWorkspaceKeyboardShortcuts";
 import {
   exportSceneAsImage,
@@ -45,7 +44,6 @@ import {
   LOCALE_STORAGE_KEY,
   SCENE_STORAGE_KEY,
   SETTINGS_STORAGE_KEY,
-  TIMER_STORAGE_KEY,
   TOPBAR_OPEN_PANEL_STORAGE_KEY,
 } from "@app/state/constants";
 import {
@@ -59,7 +57,6 @@ import {
 import { parse as parseYaml, stringify as stringifyYaml } from "yaml";
 import { appReducer, createInitialAppState } from "@app/state/reducer";
 import "./App.css";
-import { Timer } from "@features/timer/components/Timer";
 import { SearchLibrarySidebar } from "@features/sidebar/components/SearchLibrarySidebar";
 import type { LibrarySvgAsset } from "@features/library/catalog";
 import { UndoBar } from "@features/workspace/components/UndoBar";
@@ -114,8 +111,6 @@ interface DrawoProjectCommonFields {
   scene: Scene;
   locale: LocaleCode;
   openTopbarPanel: "music" | "timer" | "sidebar" | null;
-  timerState: string | null;
-  musicBarState?: string | null;
 }
 
 interface DrawoProjectFileV1 extends DrawoProjectCommonFields {
@@ -145,12 +140,7 @@ const isDrawoProjectCommonFields = (
     (candidate.openTopbarPanel === "music" ||
       candidate.openTopbarPanel === "timer" ||
       candidate.openTopbarPanel === "sidebar" ||
-      candidate.openTopbarPanel === null) &&
-    (typeof candidate.timerState === "string" ||
-      candidate.timerState === null) &&
-    (typeof candidate.musicBarState === "undefined" ||
-      typeof candidate.musicBarState === "string" ||
-      candidate.musicBarState === null)
+      candidate.openTopbarPanel === null)
   );
 };
 
@@ -287,13 +277,11 @@ const toExportableScene = async (scene: Scene): Promise<Scene> => {
 
 export default function App() {
   const [openTopbarPanel, setOpenTopbarPanel] = useState<
-    "music" | "timer" | "sidebar" | null
+    "sidebar" | null
   >(() => {
     try {
       const stored = localStorage.getItem(TOPBAR_OPEN_PANEL_STORAGE_KEY);
-      return stored === "music" || stored === "timer" || stored === "sidebar"
-        ? stored
-        : null;
+      return stored === "sidebar" ? stored : null;
     } catch {
       return null;
     }
@@ -777,7 +765,6 @@ export default function App() {
       scene: exportableScene,
       locale,
       openTopbarPanel,
-      timerState: localStorage.getItem(TIMER_STORAGE_KEY),
     };
     const serializedPayload = [
       DRAWO_PROJECT_AI_PROMPT_LINE,
@@ -873,19 +860,14 @@ export default function App() {
       );
       localStorage.setItem(LOCALE_STORAGE_KEY, parsed.locale);
 
-      if (parsed.openTopbarPanel) {
+      if (parsed.openTopbarPanel === "sidebar") {
+        // Legacy "music"/"timer" values from old files are dropped here.
         localStorage.setItem(
           TOPBAR_OPEN_PANEL_STORAGE_KEY,
           parsed.openTopbarPanel,
         );
       } else {
         localStorage.removeItem(TOPBAR_OPEN_PANEL_STORAGE_KEY);
-      }
-
-      if (parsed.timerState) {
-        localStorage.setItem(TIMER_STORAGE_KEY, parsed.timerState);
-      } else {
-        localStorage.removeItem(TIMER_STORAGE_KEY);
       }
     } catch {
       throw new Error("storage-quota-exceeded");
@@ -1246,14 +1228,12 @@ export default function App() {
   ]);
 
   return (
-    <div className="app-root">
+    <div className="relative h-svh w-svw overflow-hidden bg-(--app-bg) text-(--app-fg) [&_*]:select-none!">
       <TooltipProvider>
-        <div
-          className={`app-shell ${isSidebarOpen ? "app-shell--sidebar-open" : ""}`}
-        >
-          <div className="app-workspace">
-            <div className="drawo-topbar">
-              <div className="drawo-topbar-left">
+        <div className="flex h-full w-full min-w-0">
+          <div className="relative h-full min-w-0 flex-1 overflow-hidden">
+            <div className="absolute inset-x-0 top-0 z-20 flex w-full items-start justify-between overflow-visible p-3">
+              <div className="flex gap-2">
                 <MenuBar
                   scene={scene}
                   locale={locale}
@@ -1266,27 +1246,13 @@ export default function App() {
                   onOpenProject={handleOpenProject}
                 />
               </div>
-              <div className="drawo-topbar-right">
-                <Timer
-                  messages={messages}
-                  isOpen={openTopbarPanel === "timer"}
-                  onOpenChange={(nextIsOpen) =>
-                    setOpenTopbarPanel(nextIsOpen ? "timer" : null)
-                  }
-                />
-                <MusicBar
-                  messages={messages}
-                  isOpen={openTopbarPanel === "music"}
-                  onOpenChange={(nextIsOpen) =>
-                    setOpenTopbarPanel(nextIsOpen ? "music" : null)
-                  }
-                />
+              <div className="flex items-center gap-2 [&>div]:relative [&>div]:z-[1000] [&>div]:transition-[translate_0.2s_ease-in-out] [&>div:last-child]:duration-[0.4s] [&>div::before]:absolute [&>div::before]:bottom-full [&>div::before]:left-0 [&>div::before]:z-100 [&>div::before]:h-[200%] [&>div::before]:w-full [&>div::before]:cursor-pointer [&>div::before]:content-[''] [&>div::after]:absolute [&>div::after]:top-full [&>div::after]:left-0 [&>div::after]:z-100 [&>div::after]:h-[200%] [&>div::after]:w-full [&>div::after]:content-[''] [.drawo-presentation-mode_&>div:not(:hover):not(.active)]:-translate-y-[200%] [.drawo-zen-mode_&>div::after]:pointer-events-auto">
                 <div
-                  className={`sidebar-launcher-wrap ${isSidebarOpen ? "active" : ""}`}
+                  className={`relative ${isSidebarOpen ? "active" : ""} [&::after]:hidden`}
                 >
                   <button
                     type="button"
-                    className="sidebar-launcher"
+                    className="relative flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-(--panel-border) bg-(--panel-bg) text-[rgb(var(--text-rgb))] shadow-(--panel-shadow) backdrop-blur-lg transition-all duration-200 [corner-shape:squircle] hover:brightness-95 dark:hover:brightness-130 dark:[.active_&]:border-transparent dark:[.active_&]:bg-(--accent) dark:[.active_&]:text-white [&>*]:scale-[1.3]"
                     onClick={() =>
                       setOpenTopbarPanel((current) =>
                         current === "sidebar" ? null : "sidebar",
@@ -1364,7 +1330,7 @@ export default function App() {
               localeMessages={messages}
             />
 
-            <div className="drawo-bottomleft-bar">
+            <div className="absolute bottom-4 left-4 flex gap-2">
               <UndoBar
                 canUndo={canUndo}
                 canRedo={canRedo}
@@ -1372,7 +1338,7 @@ export default function App() {
                 onRedo={() => dispatch({ type: "redo" })}
               />
             </div>
-            <div className="drawo-bottomright-bar">
+            <div className="absolute bottom-4 right-4 flex gap-2">
               <ZoomBar
                 zoomPercent={Math.round(scene.camera.zoom * 100)}
                 canZoomOut={scene.camera.zoom > MIN_CAMERA_ZOOM}

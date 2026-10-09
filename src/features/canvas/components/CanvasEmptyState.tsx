@@ -63,21 +63,7 @@ export const DefaultCanvasEmptyState = () => {
 };
 export const CanvasEmptyState = () => {
   return (
-    <div
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: "50%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        opacity: 0.5,
-        flexDirection: "column",
-        transform: "translate(-50%, -50%)",
-        pointerEvents: "none",
-        userSelect: "none",
-      }}
-    >
+    <div className="pointer-events-none absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 select-none flex-col items-center justify-center opacity-50">
       <DefaultCanvasEmptyState />
     </div>
   );

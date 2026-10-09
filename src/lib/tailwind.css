@@ -1,0 +1,18 @@
+/**
+ * Tailwind entry for the library build.
+ *
+ * Preflight (`@import "tailwindcss"` includes base reset + theme + utilities)
+ * is intentionally included so the shipped `dist/drawo.css` is self-contained
+ * when consumed outside a Tailwind app. It lives in `@layer base`, so the
+ * library's own plain CSS (untouched by layers) always wins over it.
+ *
+ * Tailwind v4 scans `src/**\/*.{ts,tsx}` automatically; no content config
+ * needed.
+ */
+@import "tailwindcss";
+@source "../../**/*.{ts,tsx}";
+
+/* The library toggles `class="dark"` on <html> (via the app's theme
+ * settings); make Tailwind's dark: variant react to that class instead
+ * of the OS color scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
