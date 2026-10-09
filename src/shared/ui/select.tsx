@@ -5,12 +5,12 @@ import { Select as SelectPrimitive } from "radix-ui";
 import { Check, ChevronDownWide, ChevronUpWide } from "@gravity-ui/icons";
 
 const SELECT_CONTENT_CLASS =
-  "relative top-0 [transform:translateY(0px)] z-[500] min-w-[120px] max-h-[var(--radix-select-content-available-height)] overflow-x-hidden overflow-y-auto rounded-xl border border-(--panel-border) bg-[var(--popover-dark,#232323)] p-1 text-[var(--popover-dark-text,#f3f4f6)] shadow-[0_12px_28px_rgba(0,0,0,0.35)] backdrop-blur-[24px] [transform-origin:var(--radix-select-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[20px] duration-[0.1s]";
+  "relative top-0 [transform:translateY(0px)] z-[500] min-w-[120px] max-h-[var(--radix-select-content-available-height)] overflow-x-hidden overflow-y-auto rounded-xl border border-(--panel-border) bg-[var(--popover-dark,#232323)] p-1 text-[var(--popover-dark-text,#f3f4f6)] shadow-[0_12px_28px_rgba(0,0,0,0.35)] backdrop-blur-[24px] [transform-origin:var(--radix-select-content-transform-origin)] duration-[0.1s]";
 
 const SELECT_VIEWPORT_CLASS = "h-[var(--radix-select-trigger-height)] p-1.5";
 
 const SELECT_ITEM_CLASS =
-  "relative flex cursor-pointer select-none items-center rounded-lg px-[19px] py-2 text-[13px] font-medium font-[Inter,sans-serif] outline-none [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[12px] duration-[0.1s] data-[highlighted]:bg-[rgba(255,255,255,0.1)] active:scale-[0.98]";
+  "relative flex cursor-pointer select-none items-center rounded-lg px-[19px] py-2 text-[13px] font-medium font-[Inter,sans-serif] outline-none duration-[0.1s] data-[highlighted]:bg-[rgba(255,255,255,0.1)] active:scale-[0.98]";
 
 const SELECT_ITEM_INDICATOR_CLASS =
   "absolute right-2.5 flex size-3.5 items-center justify-center pointer-events-none [&>span]:flex";

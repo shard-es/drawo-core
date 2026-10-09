@@ -51,7 +51,7 @@ export const SelectionToolbar = ({
       ref={toolbarRef}
       key={toolbarKey}
       data-selection-toolbar=""
-      className="pointer-events-auto absolute z-20 flex h-[43px] -translate-x-1/2 -translate-y-2 animate-[selection-toolbar-in_180ms_ease-out] overflow-hidden rounded-xl border border-(--panel-border) bg-(--popover-dark) text-[13px] font-semibold tracking-[0.02em] text-white shadow-[var(--panel-shadow)] backdrop-blur-[24px] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-(--popover-dark) dark:shadow-[var(--panel-shadow)] dark:backdrop-blur-[24px] [.drawo-presentation-mode_&]:hidden"
+      className="pointer-events-auto absolute z-20 flex h-[43px] -translate-x-1/2 -translate-y-2 animate-[selection-toolbar-in_180ms_ease-out] overflow-hidden rounded-xl border border-(--panel-border) bg-(--popover-dark) text-[13px] font-semibold tracking-[0.02em] text-white shadow-[var(--panel-shadow)] backdrop-blur-[24px] dark:bg-(--popover-dark) dark:shadow-[var(--panel-shadow)] dark:backdrop-blur-[24px] [.drawo-presentation-mode_&]:hidden"
       onPointerDown={(event) => {
         event.stopPropagation();
       }}

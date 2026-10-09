@@ -38,10 +38,9 @@ import { Slider } from "@shared/ui/slider";
 const KEYBIND =
   "ml-auto flex items-center gap-0.5 pl-6 text-xs opacity-70 " +
   "[.drawo-zen-mode_&]:hidden " +
-  "[&>span]:rounded-[5px] [&>span]:bg-[rgba(var(--text-rgb),0.1)] " +
+  "[&>span]:rounded-md [&>span]:bg-[rgba(var(--text-rgb),0.1)] " +
   "[&>span]:px-1 [&>span]:py-0.5 [&>span]:font-medium " +
-  "[&>span]:text-[rgba(var(--text-rgb),0.6)] [&>span]:[corner-shape:squircle] " +
-  "[&>span]:supports-[corner-shape:squircle]:rounded-[12px]";
+  "[&>span]:text-[rgba(var(--text-rgb),0.6)]";
 
 export type CanvasContextMenuSelectionType = "draw" | "image" | "multiple";
 
@@ -229,7 +228,7 @@ export const CanvasContextMenu = ({
               </ContextMenuSubTrigger>
               <ContextMenuSubContent className="min-w-[230px] p-1.5">
                 <div
-                  className="flex flex-col gap-2.5 rounded-[10px] p-1.5 [corner-shape:squircle]"
+                  className="flex flex-col gap-2.5 rounded-xl p-1.5"
                   onPointerDown={(event) => event.stopPropagation()}
                   onClick={(event) => event.stopPropagation()}
                 >
@@ -237,7 +236,7 @@ export const CanvasContextMenu = ({
                     <span>{localeMessages.selectionBar.opacity}</span>
                     <div className="inline-flex items-center gap-1">
                       <input
-                        className="h-4 w-[54px] min-w-[54px] rounded-lg border border-(--panel-border) bg-[rgba(var(--text-rgb),0.1)] px-2 py-1 text-xs text-right [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[16px] transition-[border-color,box-shadow,background] duration-[120ms] [appearance:textfield] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:m-0"
+                        className="h-4 w-[54px] min-w-[54px] rounded-lg border border-(--panel-border) bg-[rgba(var(--text-rgb),0.1)] px-2 py-1 text-xs text-right transition-[border-color,box-shadow,background] duration-[120ms] [appearance:textfield] [&::-webkit-inner-spin-button]:[-webkit-appearance:none] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:[-webkit-appearance:none] [&::-webkit-outer-spin-button]:m-0"
                         type="number"
                         min={0}
                         max={100}

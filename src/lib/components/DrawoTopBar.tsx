@@ -75,7 +75,7 @@ export function DefaultSidebarLauncher() {
     <div className={`relative ${isSidebarOpen ? "active" : ""} [&::after]:hidden`}>
       <button
         type="button"
-        className="relative flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-(--panel-border) bg-(--panel-bg) text-[rgb(var(--text-rgb))] shadow-(--panel-shadow) backdrop-blur-lg transition-all duration-200 [corner-shape:squircle] hover:brightness-95 dark:hover:brightness-130 dark:[.active_&]:border-transparent dark:[.active_&]:bg-(--accent) dark:[.active_&]:text-white [&>*]:scale-[1.3]"
+        className="relative flex h-[46px] w-[46px] items-center justify-center overflow-hidden rounded-xl border border-(--panel-border) bg-(--panel-bg) text-[rgb(var(--text-rgb))] shadow-(--panel-shadow) backdrop-blur-lg transition-all duration-200 hover:brightness-95 dark:hover:brightness-130 dark:[.active_&]:border-transparent dark:[.active_&]:bg-(--accent) dark:[.active_&]:text-white [&>*]:scale-[1.3]"
         onClick={() =>
           setOpenTopbarPanel((current) =>
             current === "sidebar" ? null : "sidebar",

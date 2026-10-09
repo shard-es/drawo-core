@@ -8,7 +8,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from "@shared/ui/dropdown-menu";
-import { Palette } from "@solar-icons/react";
+import { Palette } from "@gravity-ui/icons";
 import type { LocaleMessages } from "@shared/i18n";
 import type { ColorScheme } from "./themes";
 import { SCHEME_PRESETS, THEME_LABELS } from "./themes";
@@ -33,7 +33,7 @@ export function ThemeMenuSub({
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>
-        <Palette weight="Bold" />
+        <Palette />
         {messages.menu.themes}
       </DropdownMenuSubTrigger>
       <DropdownMenuSubContent className="max-h-[min(70vh,26rem)] w-56 overflow-y-auto p-1">

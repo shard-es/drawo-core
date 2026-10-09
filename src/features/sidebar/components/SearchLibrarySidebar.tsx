@@ -123,13 +123,13 @@ const SIDEBAR_PAGE_IN_KEYFRAMES = `@keyframes drawo-sidebar-page-in {
 }`;
 
 const PANEL_CLASS =
-  "z-10 flex h-[calc(100%-16px)] w-[min(390px,34vw)] min-w-[320px] max-w-[460px] mr-2 mt-2 flex-col rounded-2xl border border-(--panel-border) bg-(--panel-bg) font-[Inter,sans-serif] shadow-[var(--panel-shadow)] backdrop-blur-[12px] [corner-shape:squircle] animate-[drawo-sidebar-page-in_220ms_ease] max-[980px]:w-[min(92vw,420px)] max-[980px]:min-w-[280px]";
+  "z-10 flex h-[calc(100%-16px)] w-[min(390px,34vw)] min-w-[320px] max-w-[460px] mr-2 mt-2 flex-col rounded-2xl border border-(--panel-border) bg-(--panel-bg) font-[Inter,sans-serif] shadow-[var(--panel-shadow)] backdrop-blur-[12px] animate-[drawo-sidebar-page-in_220ms_ease] max-[980px]:w-[min(92vw,420px)] max-[980px]:min-w-[280px]";
 
 const TABS_CLASS =
   "flex w-full items-center gap-1.5 border-b border-b-[rgba(var(--text-rgb),0.12)] p-2.5";
 
 const TAB_CLASS =
-  "inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-[18px] bg-[rgba(var(--text-rgb),0.07)] p-[9px_10px] text-xs font-semibold [corner-shape:squircle] transition duration-150";
+  "inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-[rgba(var(--text-rgb),0.07)] p-[9px_10px] text-xs font-semibold transition duration-150";
 
 const TAB_IDLE_CLASS = "hover:bg-[rgba(var(--text-rgb),0.12)]";
 
@@ -137,7 +137,7 @@ const TAB_ACTIVE_CLASS =
   "bg-[rgba(var(--accent-rgb),0.22)] text-[rgba(var(--accent-rgb),1)]";
 
 const CLOSE_BUTTON_CLASS =
-  "inline-flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-[9px] border border-[rgba(var(--text-rgb),0.01)] bg-[rgba(var(--text-rgb),0.06)] transition-colors duration-150 hover:bg-[rgba(var(--text-rgb),0.12)]";
+  "inline-flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-lg border border-[rgba(var(--text-rgb),0.01)] bg-[rgba(var(--text-rgb),0.06)] transition-colors duration-150 hover:bg-[rgba(var(--text-rgb),0.12)]";
 
 const SECTION_CLASS = "flex min-h-0 flex-1 flex-col gap-2.5 p-3";
 
@@ -154,7 +154,7 @@ const SEARCH_COUNT_CLASS = "text-xs font-medium opacity-75";
 const SEARCH_ACTIONS_CLASS = "inline-flex gap-1.5";
 
 const MINI_BUTTON_CLASS =
-  "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-[18px] border-0 bg-[rgba(var(--text-rgb),0.06)] [corner-shape:squircle] transition-colors duration-150 enabled:hover:bg-[rgba(var(--text-rgb),0.12)] disabled:cursor-not-allowed disabled:opacity-45";
+  "inline-flex size-7 shrink-0 cursor-pointer items-center justify-center rounded-xl border-0 bg-[rgba(var(--text-rgb),0.06)] transition-colors duration-150 enabled:hover:bg-[rgba(var(--text-rgb),0.12)] disabled:cursor-not-allowed disabled:opacity-45";
 
 const SEARCH_RESULTS_CLASS =
   "flex h-full flex-col gap-2 overflow-auto pr-0.5 pb-3";
@@ -165,7 +165,7 @@ const EMPTY_STATE_CLASS =
 const EMPTY_STATE_TEXT_CLASS = "m-0 text-base font-medium tracking-[-0.4px]";
 
 const RESULT_ITEM_CLASS =
-  "flex cursor-pointer flex-col gap-1 rounded-3xl border border-[rgba(var(--text-rgb),0.15)] bg-[rgba(var(--text-rgb),0.05)] p-[12px_18px] text-left [corner-shape:squircle] transition duration-150";
+  "flex cursor-pointer flex-col gap-1 rounded-3xl border border-[rgba(var(--text-rgb),0.15)] bg-[rgba(var(--text-rgb),0.05)] p-[12px_18px] text-left transition duration-150";
 
 const RESULT_ITEM_IDLE_CLASS = "hover:bg-[rgba(var(--text-rgb),0.1)]";
 
@@ -198,7 +198,7 @@ const LIBRARY_GRID_CLASS =
   "grid h-full min-h-0 w-full grid-cols-2 gap-2 overflow-auto pr-0.5 pb-2";
 
 const ASSET_CLASS =
-  "flex cursor-pointer flex-col gap-2 rounded-[14px] border border-[rgba(var(--text-rgb),0.08)] bg-[rgba(var(--text-rgb),0.05)] p-2 text-left [corner-shape:squircle] transition duration-150 active:translate-y-px";
+  "flex cursor-pointer flex-col gap-2 rounded-xl border border-[rgba(var(--text-rgb),0.08)] bg-[rgba(var(--text-rgb),0.05)] p-2 text-left transition duration-150 active:translate-y-px";
 
 const ASSET_IDLE_CLASS = "hover:bg-[rgba(var(--text-rgb),0.08)]";
 
@@ -206,7 +206,7 @@ const ASSET_SELECTED_CLASS =
   "border-[rgba(var(--accent-rgb),0.8)] bg-[rgba(var(--accent-rgb),0.14)]";
 
 const ASSET_PREVIEW_CLASS =
-  "flex aspect-[4/3] items-center justify-center overflow-hidden rounded-[10px] border border-[rgba(var(--text-rgb),0.08)] bg-[rgba(var(--text-rgb),0.04)]";
+  "flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl border border-[rgba(var(--text-rgb),0.08)] bg-[rgba(var(--text-rgb),0.04)]";
 
 const ASSET_PREVIEW_IMAGE_CLASS = "h-[86%] w-[86%] object-contain";
 

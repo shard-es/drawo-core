@@ -5,13 +5,13 @@ import { ContextMenu as ContextMenuPrimitive } from "radix-ui";
 import { ChevronRightIcon, CheckIcon } from "lucide-react";
 
 const CONTEXT_MENU_CONTENT_CLASS =
-  "z-50 min-w-48 rounded-xl border border-(--panel-border) bg-[var(--panel-bg,#fff)] p-1 text-[rgb(var(--text-rgb))] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter] [transform-origin:var(--radix-context-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-[var(--popover-dark,#1f1f1f)]!";
+  "z-50 min-w-48 rounded-xl border border-(--panel-border) bg-[var(--panel-bg,#fff)] p-1 text-[rgb(var(--text-rgb))] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter] [transform-origin:var(--radix-context-menu-content-transform-origin)] dark:bg-[var(--popover-dark,#1f1f1f)]! animate-[drawo-menu-in_160ms_cubic-bezier(0.16,1,0.3,1)]";
 
 const CONTEXT_MENU_SUBCONTENT_CLASS =
-  "z-50 min-w-48 rounded-xl border border-(--panel-border) bg-[var(--panel-bg,#fff)] p-1 text-[rgb(var(--text-rgb))] shadow-[var(--panel-shadow)] font-[Inter] [transform-origin:var(--radix-context-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:backdrop-blur-[24px] dark:bg-[var(--popover-dark,#1f1f1f)]!";
+  "z-50 min-w-48 rounded-xl border border-(--panel-border) bg-[var(--panel-bg,#fff)] p-1 text-[rgb(var(--text-rgb))] shadow-[var(--panel-shadow)] font-[Inter] [transform-origin:var(--radix-context-menu-content-transform-origin)] dark:backdrop-blur-[24px] dark:bg-[var(--popover-dark,#1f1f1f)]! animate-[drawo-menu-in_160ms_cubic-bezier(0.16,1,0.3,1)]";
 
 const CONTEXT_MENU_ITEM_CLASS =
-  "flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-3 py-2 text-base outline-none [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] not-data-[disabled=true]:focus:bg-[rgba(var(--text-rgb),0.1)] not-data-[disabled=true]:data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50";
+  "flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-3 py-2 text-base outline-none not-data-[disabled=true]:focus:bg-[rgba(var(--text-rgb),0.1)] not-data-[disabled=true]:data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50";
 
 const CONTEXT_MENU_VARIANT_CLASS =
   "data-[variant=accent]:text-[rgb(var(--accent-rgb))]! data-[variant=accent]:[filter:brightness(0.5)] data-[variant=accent]:hover:bg-[rgba(var(--accent-rgb),0.179)]! data-[variant=destructive]:text-[rgb(255,4,4)]! data-[variant=destructive]:hover:bg-[rgba(255,0,0,0.179)]! dark:data-[variant=destructive]:text-[rgb(255,126,126)]! dark:data-[variant=destructive]:hover:bg-[rgba(255,126,126,0.1)]!";

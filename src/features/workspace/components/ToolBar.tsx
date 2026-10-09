@@ -63,7 +63,7 @@ interface ToolBarProps {
 }
 
 const TOOL_ITEM_BASE_CLASS =
-  "flex h-10 w-10 cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center rounded-[10px] border-none bg-transparent p-[10px] text-[13px] font-medium text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] dark:text-[#e5e7eb] [&_svg]:size-5";
+  "flex h-10 w-10 cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center rounded-xl border-none bg-transparent p-[10px] text-[13px] font-medium text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] active:scale-[0.97] dark:text-[#e5e7eb] [&_svg]:size-5";
 
 const TOOL_ITEM_ACTIVE_CLASS =
   "bg-(--accent) text-white dark:bg-(--accent-dark)";
@@ -182,7 +182,7 @@ export const ToolBar = ({
 
   const drawTools = ["draw", "marker", "quill"];
   return (
-    <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-px rounded-[15px] border border-(--panel-border) bg-(--panel-bg) p-2 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle] [.drawo-presentation-mode_&]:translate-y-[200%]">
+    <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 items-center gap-px rounded-2xl border border-(--panel-border) bg-(--panel-bg) p-2 shadow-(--panel-shadow) backdrop-blur-3xl [.drawo-presentation-mode_&]:translate-y-[200%]">
       <input
         ref={imageInputRef}
         type="file"
@@ -202,7 +202,7 @@ export const ToolBar = ({
         }}
       />
       {drawTools.includes(drawingTool) ? (
-        <div className="absolute bottom-full left-1/2 z-10 flex -translate-x-1/2 -translate-y-2 items-center gap-px rounded-[15px] border border-(--panel-border) bg-(--panel-bg) p-1 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle]">
+        <div className="absolute bottom-full left-1/2 z-10 flex -translate-x-1/2 -translate-y-2 items-center gap-px rounded-2xl border border-(--panel-border) bg-(--panel-bg) p-1 shadow-(--panel-shadow) backdrop-blur-3xl">
           <Tooltip>
             <TooltipTrigger asChild>
               <button
@@ -325,7 +325,7 @@ export const ToolBar = ({
               <TooltipTrigger asChild>
                 <SelectTrigger
                   noArrow
-                  className="flex h-10 w-[94.7px] cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center gap-0 rounded-[24px] border-none bg-transparent p-3 text-current shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] [corner-shape:squircle]"
+                  className="flex h-10 w-[94.7px] cursor-[var(--drawo-cursor-pointer),auto] items-center justify-center gap-0 rounded-2xl border-none bg-transparent p-3 text-current shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)]"
                 >
                   <span className={`${STROKE_PREVIEW_WRAP_CLASS} [&_svg]:[transform:scaleX(0.4)_translateX(-76%)]`}>
                     {(() => {

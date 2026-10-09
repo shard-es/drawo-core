@@ -8,7 +8,7 @@ const DIALOG_OVERLAY_CLASS =
   "fixed inset-0 z-[5000] animate-[drawo-fade-in_120ms_ease] bg-[rgba(0,0,0,0.1)] backdrop-blur-[2px] dark:bg-[rgba(0,0,0,0.4)]";
 
 const DIALOG_CONTENT_CLASS =
-  "fixed top-1/2 left-1/2 z-[50000] grid max-h-[90vh] w-full max-w-[32rem] [transform:translate(-50%,-50%)] gap-3 overflow-y-scroll [scrollbar-width:thin] rounded-[18px] border border-(--panel-border) bg-[var(--background,#fff)] p-4 px-7 text-sm shadow-[var(--panel-shadow)] backdrop-blur-[30px] font-[Inter,sans-serif] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[28px] animate-[drawo-dialog-in_160ms_cubic-bezier(0.16,1,0.3,1)] [&_*]:duration-[0.1s] [&_p]:m-0 [&_h1:nth-of-type(1)]:mt-0 dark:bg-[var(--popover-dark,#1c1c1f)] dark:text-white";
+  "fixed top-1/2 left-1/2 z-[50000] grid max-h-[90vh] w-full max-w-[32rem] [transform:translate(-50%,-50%)] gap-3 overflow-y-scroll [scrollbar-width:thin] rounded-xl border border-(--panel-border) bg-[var(--background,#fff)] p-4 px-7 text-sm shadow-[var(--panel-shadow)] backdrop-blur-[30px] font-[Inter,sans-serif] animate-[drawo-dialog-in_160ms_cubic-bezier(0.16,1,0.3,1)] [&_*]:duration-[0.1s] [&_p]:m-0 [&_h1:nth-of-type(1)]:mt-0 dark:bg-[var(--popover-dark,#1c1c1f)] dark:text-white";
 
 const DIALOG_HEADER_CLASS =
   "flex flex-col gap-1.5 [&_p]:text-sm [&_p]:[transform:translateY(-10px)] [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-[-1px]";
@@ -22,7 +22,7 @@ const DIALOG_DESCRIPTION_CLASS =
   "text-sm text-[#6b7280] dark:text-[#9ca3af]";
 
 const DIALOG_CLOSE_BUTTON_CLASS =
-  "absolute top-7 right-7 flex rounded-3xl border-none bg-transparent p-1 text-current duration-[0.1s] [corner-shape:squircle] hover:bg-[rgba(var(--text-rgb),0.1)] [&_svg]:scale-90 [&_svg_*]:stroke-1";
+  "absolute top-7 right-7 flex rounded-3xl border-none bg-transparent p-1 text-current duration-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] [&_svg]:scale-90 [&_svg_*]:stroke-1";
 
 function Dialog(props: React.ComponentProps<typeof DialogPrimitive.Root>) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;

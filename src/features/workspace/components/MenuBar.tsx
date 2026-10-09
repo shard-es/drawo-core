@@ -116,7 +116,7 @@ export interface MenuBarProps {
 
 /** Shared button visuals for dialog actions (Tailwind). */
 const DIALOG_BTN_BASE =
-  "cursor-pointer rounded-[10px] border-none px-[14px] py-[10px] text-[13px] font-semibold shadow-none outline-none transition-[0.1s]";
+  "cursor-pointer rounded-xl border-none px-[14px] py-[10px] text-[13px] font-semibold shadow-none outline-none transition-[0.1s]";
 const DIALOG_BTN_PRIMARY = `${DIALOG_BTN_BASE} bg-(--accent) text-white shadow-[0_10px_20px_rgba(var(--accent-rgb),0.25)] hover:brightness-95 dark:brightness-110`;
 const DIALOG_BTN_SECONDARY = `${DIALOG_BTN_BASE} bg-black/[0.08] text-[#111827] hover:bg-black/[0.12] dark:bg-white/[0.08] dark:text-[#f3f4f6] dark:hover:bg-white/[0.12]`;
 const DIALOG_BTN_DANGER = `${DIALOG_BTN_BASE} bg-[#ef4444] text-white shadow-[0_10px_20px_rgba(239,68,68,0.25)] hover:bg-[#dc2626] dark:shadow-[0_12px_24px_rgba(239,68,68,0.35)]`;
@@ -289,7 +289,7 @@ export const MenuBar = ({
   ]);
 
   return (
-    <div className="z-10 flex w-fit select-none items-center justify-center gap-px rounded-xl border border-(--panel-border) bg-(--panel-bg) p-0.5 shadow-(--panel-shadow) backdrop-blur-3xl [corner-shape:squircle]">
+    <div className="z-10 flex w-fit select-none items-center justify-center gap-px rounded-xl border border-(--panel-border) bg-(--panel-bg) p-0.5 shadow-(--panel-shadow) backdrop-blur-3xl">
       <input
         ref={projectInputRef}
         type="file"
@@ -299,11 +299,11 @@ export const MenuBar = ({
       />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <button type="button" className="flex size-10 items-center justify-center rounded-[10px] border-none bg-transparent p-[10px] text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] dark:text-[#e5e7eb] [&_svg]:size-5" onClick={() => { }}>
+          <button type="button" className="flex size-10 items-center justify-center rounded-xl border-none bg-transparent p-[10px] text-black shadow-none outline-none transition-[0.1s] hover:bg-[rgba(var(--text-rgb),0.1)] active:scale-95 dark:text-[#e5e7eb] [&_svg]:size-5" onClick={() => { }}>
             <MenuIcon />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="drawo-menu-stagger">
           <DropdownMenuItem disabled variant="accent">
             <Thunderbolt /> {messages.menu.quickActions}
           </DropdownMenuItem>
@@ -745,7 +745,7 @@ export const MenuBar = ({
                 }));
               }}
             />
-            <span className="flex items-center gap-3 [&_.drawo-beta]:ml-0 [&_.drawo-beta]:pl-0">
+            <span className="flex items-center gap-3">
               {messages.dialogs.laserCanvas.enableShadows}{" "}
               <span className="ml-auto flex items-center gap-0.5 pl-6 text-xs opacity-70 [&_span]:rounded-md [&_span]:bg-[rgba(var(--accent-rgb),0.5)] [&_span]:px-1 [&_span]:py-0.5 [&_span]:font-medium [&_span]:text-[rgb(var(--accent-rgb))]">
                 <span>BETA</span>
@@ -809,7 +809,7 @@ export const MenuBar = ({
                   }
                 }}
               >
-                <SelectTrigger className="inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 rounded-[24px] border-none bg-[rgba(var(--text-rgb),0.1)] px-5 py-5 shadow-none outline-none [corner-shape:squircle]">
+                <SelectTrigger className="inline-flex h-(--selectiontoolbar-height) items-center justify-between gap-0 rounded-2xl border-none bg-[rgba(var(--text-rgb),0.1)] px-5 py-5 shadow-none outline-none">
                   <SelectValue
                     placeholder={messages.dialogs.exportImage.format}
                   />
@@ -864,7 +864,7 @@ export const MenuBar = ({
                 setExportTransparentBackground(value);
               }}
             />
-            <span className="flex items-center gap-3 [&_.drawo-beta]:ml-0 [&_.drawo-beta]:pl-0">
+            <span className="flex items-center gap-3">
               {messages.dialogs.exportImage.transparentBackground}
             </span>
           </div>

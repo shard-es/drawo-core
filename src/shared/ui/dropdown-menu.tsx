@@ -6,13 +6,13 @@ import { CheckIcon } from "lucide-react";
 import { Check, ChevronRight } from "@gravity-ui/icons";
 
 const DROPDOWN_CONTENT_CLASS =
-  "z-50 w-[250px]! min-w-32 mt-1 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)]";
+  "z-50 w-[250px]! min-w-32 mt-1 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)] animate-[drawo-menu-in_160ms_cubic-bezier(0.16,1,0.3,1)]";
 
 const DROPDOWN_SUBCONTENT_CLASS =
-  "z-50 min-w-56 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)]";
+  "z-50 min-w-56 rounded-xl border border-(--panel-border) bg-[var(--popover,#fff)] p-1 text-[var(--popover-foreground,#111)] shadow-[var(--panel-shadow)] backdrop-blur-[24px] font-[Inter,sans-serif] [transform-origin:var(--radix-dropdown-menu-content-transform-origin)] dark:bg-[var(--popover-dark,#1f1f1f)] dark:text-[var(--popover-foreground-dark,#eee)] animate-[drawo-menu-in_160ms_cubic-bezier(0.16,1,0.3,1)]";
 
 const DROPDOWN_ITEM_CLASS =
-  "relative flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-4 py-2.5 pr-9 text-sm whitespace-nowrap outline-none [corner-shape:squircle] supports-[corner-shape:squircle]:rounded-[24px] focus:bg-[rgba(var(--text-rgb),0.1)] data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] [&_svg]:size-4 [&_svg]:min-w-4 [&_svg]:min-h-4 [&_svg_*]:stroke-[1.5]";
+  "relative flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-4 py-2.5 pr-9 text-sm whitespace-nowrap outline-none focus:bg-[rgba(var(--text-rgb),0.1)] data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] [&_svg]:size-4 [&_svg]:min-w-4 [&_svg]:min-h-4 [&_svg_*]:stroke-[1.5]";
 
 const DROPDOWN_ITEM_VARIANT_CLASS =
   "data-[variant=accent]:text-[rgb(var(--accent-rgb))]! data-[variant=accent]:[filter:brightness(0.5)] data-[variant=accent]:hover:bg-[rgba(var(--accent-rgb),0.179)]! data-[variant=destructive]:text-[rgb(255,4,4)]! data-[variant=destructive]:hover:bg-[rgba(255,0,0,0.179)]! dark:data-[variant=destructive]:text-[rgb(255,126,126)]! dark:data-[variant=destructive]:hover:bg-[rgba(255,126,126,0.1)]!";
