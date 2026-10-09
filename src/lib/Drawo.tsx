@@ -16,6 +16,7 @@ import { DrawoToolBar } from "./components/DrawoToolBar";
 import { DrawoUndoBar } from "./components/DrawoUndoBar";
 import { DrawoZoomBar } from "./components/DrawoZoomBar";
 import { DrawoEmptyState } from "./components/DrawoEmptyState";
+import { SearchLibrarySidebar } from "@features/sidebar/components/SearchLibrarySidebar";
 import "@app/theme/base-tokens.css";
 import "@app/theme/themes/drawo-light.css";
 import "@app/theme/themes/drawo-dark.css";
@@ -95,7 +96,13 @@ function DrawoLayout({
   style?: React.CSSProperties;
 }) {
   const ctx = useDrawo();
-  const { openTopbarPanel } = ctx;
+  const {
+    openTopbarPanel,
+    scene,
+    setOpenTopbarPanel,
+    onFocusElement,
+    onInsertLibrarySvg,
+  } = ctx;
   const isSidebarOpen = openTopbarPanel === "sidebar";
 
   const slots: Partial<Record<DrawoLayoutSlot, ReactNode>> = {};
@@ -166,6 +173,15 @@ function DrawoLayout({
             {slots.zoomBar ?? <DrawoZoomBar />}
             {extraChildren}
           </div>
+          <SearchLibrarySidebar
+            scene={scene}
+            isOpen={isSidebarOpen}
+            onOpenChange={(nextIsOpen) =>
+              setOpenTopbarPanel(nextIsOpen ? "sidebar" : null)
+            }
+            onFocusElement={onFocusElement}
+            onInsertLibraryAsset={onInsertLibrarySvg}
+          />
         </div>
       </TooltipProvider>
     </div>

@@ -1,0 +1,36 @@
+/**
+ * Base theme tokens.
+ *
+ * These are the neutral fallbacks used before `data-theme` is applied (for
+ * example on the very first paint, or when the consumer renders the library
+ * outside of a themed scene). They deliberately mirror the `drawo-light`
+ * preset so the first frame already looks correct instead of unstyled.
+ *
+ * Every theme file sets the same custom properties under a
+ * `[data-theme="<scheme>-<mode>"]` selector, and because those selectors have
+ * the same specificity as `:root` but are imported afterwards, they always win.
+ */
+:root {
+  color-scheme: light;
+
+  --accent: #7c5cff;
+  --accent-dark: #7c5cff;
+  --accent-rgb: 124, 92, 255;
+
+  --logoduotone-firstcolor: #6f5af6;
+  --logoduotone-secondcolor: #3119cf;
+  --logocolor: #4c4f69;
+
+  --text-rgb: 15, 15, 15;
+  --background-rgb: 220, 220, 220;
+
+  --panel-border: rgba(0, 0, 0, 0.1);
+  --panel-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+
+  --app-bg: #f5f4f4;
+  --app-fg: #1f2937;
+  --panel-bg: rgba(255, 255, 255, 0.94);
+
+  --popover-dark: rgba(26, 26, 26, 0.94);
+  --popover-foreground-dark: #1f2937;
+}

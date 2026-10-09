@@ -290,6 +290,8 @@ export function ZoomBar(props: { zoomPercent: number; canZoomOut: boolean; canZo
 export function CanvasView(props: Record<string, unknown>): JSX.Element;
 export function CanvasContextMenu(props: Record<string, unknown>): JSX.Element;
 export function CanvasEmptyState(props: Record<string, unknown>): JSX.Element;
+/** The library's own watermark logotype used as the default empty-state content. */
+export function DefaultCanvasEmptyState(props: Record<string, unknown>): JSX.Element;
 export function SelectionToolbar(props: Record<string, unknown>): JSX.Element;
 export function SelectionTextControls(props: Record<string, unknown>): JSX.Element;
 export function SelectionShapeControls(props: Record<string, unknown>): JSX.Element;

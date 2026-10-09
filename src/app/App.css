@@ -1366,20 +1366,6 @@ html.dark .canvas-text-editor-input *::selection {
   }
 }
 
-.drawo-title-center {
-  text-align: center;
-  margin: 24px auto;
-  text-transform: uppercase;
-}
-.theme-entries {
-  flex-wrap: wrap;
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  width: 70%;
-  margin: 12px auto 0px;
-  padding-bottom: 4px;
-}
 .drawo-dialog-content {
   max-height: 90vh;
   overflow-y: scroll;
@@ -1388,105 +1374,181 @@ html.dark .canvas-text-editor-input *::selection {
 .drawo-dialog-content h1:nth-of-type(1) {
   margin-top: 0px;
 }
-.theme-entry-container:hover .theme-entry {
-  scale: 1.01;
+
+/* themes dialog */
+.drawo-themes-dialog {
+  background: var(--app-bg);
+  color: var(--app-fg);
+  padding: 32px !important;
+  gap: 24px !important;
+  overflow: hidden;
+}
+.drawo-themes-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--panel-border);
+}
+.drawo-themes-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.drawo-themes-title {
+  margin: 0 !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em;
+  color: var(--app-fg);
+}
+.drawo-tabs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(var(--text-rgb), 0.08);
+  border: 1px solid var(--panel-border);
+  width: min(300px, 100%);
+  flex-shrink: 0;
+}
+.drawo-tab {
+  flex: 1;
+  font-family: Inter, var(--sans-serif);
+  border: none;
+  background: transparent;
+  color: inherit;
+  border-radius: 999px;
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 16px;
+  justify-content: center;
+  transition: all 140ms ease;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.65;
+}
+.drawo-tab:hover {
+  opacity: 1;
+}
+.drawo-tab svg {
+  flex-shrink: 0;
+}
+.drawo-tab.active {
+  background-color: var(--panel-bg);
+  color: rgb(var(--text-rgb));
+  opacity: 1;
+  box-shadow: var(--panel-shadow);
+}
+
+.theme-entries {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  align-content: start;
+  gap: 20px 16px;
+  padding: 4px 4px 12px;
 }
 .theme-entry-container {
   display: flex;
-  justify-content: center;
-  gap: 4px;
-  float: left;
-  align-items: center;
   flex-direction: column;
-  padding-bottom: 6px;
+  align-items: stretch;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 160ms ease;
 }
-.theme-entry-container p {
-  font-weight: 500;
-  opacity: 0.75;
-  margin-top: 8px;
-  font-size: 14px;
+.theme-entry-container:hover {
+  transform: translateY(-2px);
+}
+.theme-entry {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+  corner-shape: squircle;
+  border: 2px solid var(--panel-border);
+  box-shadow: var(--panel-shadow);
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 .drawo-themepreview-bottombar {
-  background: var(--panel-bg);
   position: absolute;
-  height: 20%;
-  width: 60%;
-  overflow: hidden;
   left: 50%;
-  box-shadow: var(--panel-shadow);
-  border: 1px solid var(--panel-border);
+  bottom: 8%;
+  width: 62%;
+  height: 24%;
   transform: translateX(-50%);
-  border-radius: 0.8vmin;
-  bottom: 0.55vmin;
-}
-.drawo-logopreview {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  box-shadow: var(--panel-shadow);
 }
 .drawo-themepreview-bottombar-item {
   position: absolute;
-  height: 1.89vmin;
-  width: 1.89vmin;
-  left: 0.16vmin;
-  top: 0.11vmin;
-  scale: 0.7;
-  border-radius: 0.6vmin;
+  left: 8%;
+  top: 50%;
+  width: 18%;
+  aspect-ratio: 1;
+  transform: translateY(-50%) scale(0.72);
+  border-radius: 30%;
   background-color: var(--accent);
 }
 .drawo-themepreview-bottombar-item[data-isdark="true"] {
   background-color: var(--accent-dark);
 }
-
-.theme-entry.selected {
-  border-color: var(--accent) !important;
-  border-width: 0.18vmin !important;
+.drawo-logopreview {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 64%;
+  height: auto;
+  transform: translate(-50%, -50%);
 }
-.theme-entry {
-  flex-shrink: 0;
-  border-radius: 24px;
-  corner-shape: squircle;
-  position: relative;
-  cursor: pointer;
-  width: 11vw;
-  overflow: hidden;
-  height: 12vh;
-  border: 0.1vmin solid var(--panel-border);
-
-  float: left;
-}
-
-.drawo-tab.active {
-  background-color: rgba(255, 255, 255);
-}
-.drawo-tab {
-  font-family: Inter, var(--sans-serif);
-  border-radius: 500px;
+.theme-entry-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
   display: flex;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 12px 4px;
-  justify-content: center;
-  transition: 0.1s;
   align-items: center;
-  gap: 8px;
-  width: 100%;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
-.dark .drawo-tab.active {
-  background-color: rgba(255, 255, 255, 0.1);
+.theme-entry-check svg {
+  width: 16px;
+  height: 16px;
 }
-.drawo-tabs {
-  display: flex;
-  width: 50%;
-  margin: 0px auto;
-  background: rgba(0, 0, 0, 0.1);
-  padding: 5px;
-  border-radius: 500px;
-  height: fit-content;
+.theme-entry-container.selected .theme-entry {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.25), var(--panel-shadow);
 }
-.dark .drawo-tabs {
-  background: rgba(0, 0, 0, 0.2);
+.theme-entry-label {
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.75;
+  color: inherit;
 }
 
 .size-full {
@@ -2276,7 +2338,6 @@ p.label {
   width: 100%;
   border: 0;
   overflow: hidden;
-  overflow: hidden;
   position: relative;
   height: 46px;
   justify-content: center;
@@ -2285,9 +2346,10 @@ p.label {
   box-shadow: var(--panel-shadow);
   backdrop-filter: blur(8px);
   align-items: center;
+  background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   cursor: pointer;
-  color: inherit;
+  color: rgb(var(--text-rgb));
   corner-shape: squircle;
   transition: all 160ms ease;
 }
@@ -2307,6 +2369,13 @@ p.label {
 .dark .sidebar-launcher:hover,
 .drawo-app-root--dark .sidebar-launcher:hover {
   background: var(--popover-dark, #1e1e1e);
+}
+
+.sidebar-launcher-wrap.active .sidebar-launcher,
+.dark .sidebar-launcher-wrap.active .sidebar-launcher {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
 }
 
 .sidebar-launcher-wrap {
