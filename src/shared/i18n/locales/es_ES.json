@@ -19,6 +19,8 @@
     "zenMode": "Modo zen",
     "presentationMode": "Modo presentación",
     "colorProfile": "Perfil de color",
+    "home": "Ir al inicio",
+    "renameProject": "Renombrar proyecto...",
 
     "file": "Archivo",
     "edit": "Editar",
@@ -64,6 +66,14 @@
       "cancel": "Cancelar",
       "invalidExtension": "Solo se pueden abrir archivos .drawo",
       "invalidFile": "El archivo .drawo no es válido"
+    },
+    "renameProject": {
+      "title": "Renombrar proyecto",
+      "description": "Escribe un nombre nuevo para este proyecto.",
+      "label": "Nombre",
+      "placeholder": "Mi proyecto",
+      "confirm": "Guardar",
+      "cancel": "Cancelar"
     },
     "exportImage": {
       "title": "Exportar imagen",

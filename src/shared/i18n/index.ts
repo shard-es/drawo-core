@@ -24,6 +24,8 @@ export interface LocaleMessages {
     zenMode: string;
     presentationMode: string;
     colorProfile: string;
+    home: string;
+    renameProject: string;
 
     file: string;
     edit: string;
@@ -69,6 +71,14 @@ export interface LocaleMessages {
       cancel: string;
       invalidExtension: string;
       invalidFile: string;
+    };
+    renameProject: {
+      title: string;
+      description: string;
+      label: string;
+      placeholder: string;
+      confirm: string;
+      cancel: string;
     };
     exportImage: {
       title: string;

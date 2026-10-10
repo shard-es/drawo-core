@@ -57,6 +57,9 @@ export function DefaultMenuBar(
       onOpenProject={
         handlers.handleOpenProject as (file: File) => Promise<void>
       }
+      projectName={ctx.props.projectName}
+      onGoHome={ctx.props.onGoHome}
+      onRenameProject={ctx.props.onRenameProject}
       {...props}
     />
   );

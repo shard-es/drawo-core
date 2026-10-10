@@ -18,7 +18,7 @@ const DROPDOWN_ITEM_VARIANT_CLASS =
   "data-[variant=accent]:text-[rgb(var(--accent-rgb))]! data-[variant=accent]:[filter:brightness(0.5)] data-[variant=accent]:hover:bg-[rgba(var(--accent-rgb),0.179)]! data-[variant=destructive]:text-[rgb(255,4,4)]! data-[variant=destructive]:hover:bg-[rgba(255,0,0,0.179)]! dark:data-[variant=destructive]:text-[rgb(255,126,126)]! dark:data-[variant=destructive]:hover:bg-[rgba(255,126,126,0.1)]!";
 
 const DROPDOWN_ITEM_DISABLED_CLASS =
-  "data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50";
+  "data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50";
 
 /* Radix renders `data-disabled` (empty value) and `aria-disabled="true"` on the
    sub trigger itself, so the state is matched by attribute presence there. */
@@ -108,7 +108,7 @@ function DropdownMenuItem({
       data-slot="dropdown-menu-item"
       data-inset={inset}
       data-variant={variant}
-      data-disabled={disabled}
+      disabled={disabled}
       className={
         DROPDOWN_ITEM_CLASS +
         " " +
@@ -268,16 +268,20 @@ function DropdownMenuSubTrigger({
 
 function DropdownMenuSubContent({
   className,
+  sideOffset = 8,
   ...props
 }: React.ComponentProps<typeof DropdownMenuPrimitive.SubContent>) {
   return (
-    <DropdownMenuPrimitive.SubContent
-      data-slot="dropdown-menu-sub-content"
-      className={
-        DROPDOWN_SUBCONTENT_CLASS + (className ? " " + className : "")
-      }
-      {...props}
-    />
+    <DropdownMenuPrimitive.Portal>
+      <DropdownMenuPrimitive.SubContent
+        data-slot="dropdown-menu-sub-content"
+        sideOffset={sideOffset}
+        className={
+          DROPDOWN_SUBCONTENT_CLASS + (className ? " " + className : "")
+        }
+        {...props}
+      />
+    </DropdownMenuPrimitive.Portal>
   );
 }
 

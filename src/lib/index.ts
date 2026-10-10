@@ -42,6 +42,8 @@ export type { Scene, SceneSettings, NewElementType } from "@core/scene";
 export type { SceneElement } from "@core/elements";
 export type { LocaleCode, LocaleMessages } from "@shared/i18n";
 export type { ExportImageFormat } from "@features/workspace/exportImage";
+export { generateScenePreviewDataUrl } from "@features/workspace/exportImage";
+export type { ScenePreviewOptions } from "@features/workspace/exportImage";
 export type {
   LibrarySvgAsset,
   LibraryCategoryId,

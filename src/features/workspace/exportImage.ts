@@ -1027,3 +1027,111 @@ export const exportSceneAsImage = async ({
   const pdfBlob = pdf.output("blob");
   downloadBlob(pdfBlob, `${baseName}.pdf`);
 };
+
+// ---------------------------------------------------------------------------
+// Scene previews (thumbnails)
+// ---------------------------------------------------------------------------
+
+export interface ScenePreviewOptions {
+  scene: Scene;
+  /** Longest edge of the generated preview, in px. Default 960. */
+  maxEdge?: number;
+  /** Padding around the drawn content, in scene units. Default 64. */
+  padding?: number;
+  /** Keep the background transparent? Default true. */
+  transparentBackground?: boolean;
+  systemPrefersDark?: boolean;
+}
+
+/**
+ * Renders a whole scene with the exact same canvas engine the editor and the
+ * image exporter use, and returns a PNG data URL.
+ *
+ * Unlike `exportSceneAsImage` this ignores the current selection (a preview
+ * always shows the full project), never downloads anything and returns `null`
+ * for empty scenes. Intended for thumbnails and dashboard previews.
+ */
+export const generateScenePreviewDataUrl = async ({
+  scene,
+  maxEdge = 960,
+  padding = 64,
+  transparentBackground = true,
+  systemPrefersDark = false,
+}: ScenePreviewOptions): Promise<string | null> => {
+  const sourceElements = scene.elements;
+
+  if (sourceElements.length === 0) {
+    return null;
+  }
+
+  const measurementCanvas = document.createElement("canvas");
+  measurementCanvas.width = 1;
+  measurementCanvas.height = 1;
+  const measurementCtx = measurementCanvas.getContext("2d");
+
+  if (!measurementCtx) {
+    return null;
+  }
+
+  const boundsList = sourceElements.map((element) =>
+    getElementBounds(element, measurementCtx),
+  );
+
+  const minX = Math.min(...boundsList.map((bounds) => bounds.x));
+  const minY = Math.min(...boundsList.map((bounds) => bounds.y));
+  const maxX = Math.max(...boundsList.map((bounds) => bounds.x + bounds.width));
+  const maxY = Math.max(
+    ...boundsList.map((bounds) => bounds.y + bounds.height),
+  );
+
+  const safePadding = clamp(padding, 0, 512);
+  const worldX = minX - safePadding;
+  const worldY = minY - safePadding;
+  const worldWidth = Math.max(1, maxX - minX + safePadding * 2);
+  const worldHeight = Math.max(1, maxY - minY + safePadding * 2);
+
+  const safeMaxEdge = clamp(maxEdge, 64, 2048);
+  const scale = clamp(
+    Math.min(safeMaxEdge / worldWidth, safeMaxEdge / worldHeight),
+    0.02,
+    4,
+  );
+
+  const width = Math.max(1, Math.ceil(worldWidth * scale));
+  const height = Math.max(1, Math.ceil(worldHeight * scale));
+
+  const previewCanvas = document.createElement("canvas");
+  previewCanvas.width = width;
+  previewCanvas.height = height;
+
+  const ctx = previewCanvas.getContext("2d");
+
+  if (!ctx) {
+    return null;
+  }
+
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+
+  if (!transparentBackground) {
+    ctx.fillStyle = scene.settings.drawDefaults.canvas;
+    ctx.fillRect(0, 0, width, height);
+  }
+
+  ctx.setTransform(scale, 0, 0, scale, -worldX * scale, -worldY * scale);
+
+  const imageCache = await buildImageCache(sourceElements);
+  const toThemeColor = createThemeColorResolver(scene, systemPrefersDark);
+  const isDarkMode = getIsDarkMode(scene, systemPrefersDark);
+
+  renderElementsToCanvas(
+    ctx,
+    scene,
+    sourceElements,
+    imageCache,
+    toThemeColor,
+    isDarkMode,
+  );
+
+  return previewCanvas.toDataURL("image/png");
+};

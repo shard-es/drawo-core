@@ -11,7 +11,7 @@ const CONTEXT_MENU_SUBCONTENT_CLASS =
   "z-50 min-w-48 rounded-xl border border-(--panel-border) bg-[var(--panel-bg,#fff)] p-1 text-[rgb(var(--text-rgb))] shadow-[var(--panel-shadow)] font-[Inter] [transform-origin:var(--radix-context-menu-content-transform-origin)] dark:backdrop-blur-[24px] dark:bg-[var(--popover-dark,#1f1f1f)]! animate-[drawo-menu-in_160ms_cubic-bezier(0.16,1,0.3,1)]";
 
 const CONTEXT_MENU_ITEM_CLASS =
-  "flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-3 py-2 text-base outline-none not-data-[disabled=true]:focus:bg-[rgba(var(--text-rgb),0.1)] not-data-[disabled=true]:data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] data-[disabled=true]:cursor-not-allowed data-[disabled=true]:opacity-50";
+  "flex cursor-pointer select-none items-center gap-1.5 rounded-xl px-3 py-2 text-base outline-none not-data-[disabled]:focus:bg-[rgba(var(--text-rgb),0.1)] not-data-[disabled]:data-[highlighted]:bg-[rgba(var(--text-rgb),0.1)] data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50";
 
 const CONTEXT_MENU_VARIANT_CLASS =
   "data-[variant=accent]:text-[rgb(var(--accent-rgb))]! data-[variant=accent]:[filter:brightness(0.5)] data-[variant=accent]:hover:bg-[rgba(var(--accent-rgb),0.179)]! data-[variant=destructive]:text-[rgb(255,4,4)]! data-[variant=destructive]:hover:bg-[rgba(255,0,0,0.179)]! dark:data-[variant=destructive]:text-[rgb(255,126,126)]! dark:data-[variant=destructive]:hover:bg-[rgba(255,126,126,0.1)]!";
@@ -115,7 +115,7 @@ function ContextMenuItem({
     <ContextMenuPrimitive.Item
       data-slot="context-menu-item"
       data-inset={inset}
-      data-disabled={disabled}
+      disabled={disabled}
       data-variant={variant}
       className={
         CONTEXT_MENU_ITEM_CLASS +
@@ -154,13 +154,15 @@ function ContextMenuSubContent({
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.SubContent>) {
   return (
-    <ContextMenuPrimitive.SubContent
-      data-slot="context-menu-sub-content"
-      className={
-        CONTEXT_MENU_SUBCONTENT_CLASS + (className ? " " + className : "")
-      }
-      {...props}
-    />
+    <ContextMenuPrimitive.Portal>
+      <ContextMenuPrimitive.SubContent
+        data-slot="context-menu-sub-content"
+        className={
+          CONTEXT_MENU_SUBCONTENT_CLASS + (className ? " " + className : "")
+        }
+        {...props}
+      />
+    </ContextMenuPrimitive.Portal>
   );
 }
 

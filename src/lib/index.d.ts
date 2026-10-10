@@ -29,6 +29,12 @@ export interface DrawoProps {
   onDrawingToolChange?: (tool: NewElementType | "laser" | null) => void;
   onLocaleChange?: (locale: "en_US" | "es_ES") => void;
   onThemeChange?: (theme: string, colorScheme: "light" | "dark") => void;
+  /** Current project name; surfaced in the built-in MenuBar rename dialog. */
+  projectName?: string | null;
+  /** When provided, the MenuBar shows a "go to home" entry that calls this. */
+  onGoHome?: () => void;
+  /** When provided, the MenuBar shows a "rename project" entry that calls this. */
+  onRenameProject?: (name: string) => void | Promise<void>;
   children?: ReactNode;
 }
 
@@ -203,6 +209,23 @@ export interface DrawoContextValue {
 }
 
 export type ExportImageFormat = "png" | "jpg" | "svg" | "pdf";
+export interface ScenePreviewOptions {
+  scene: Scene;
+  /** Longest edge of the generated preview, in px. Default 960. */
+  maxEdge?: number;
+  /** Padding around the drawn content, in scene units. Default 64. */
+  padding?: number;
+  /** Keep the background transparent? Default true. */
+  transparentBackground?: boolean;
+  systemPrefersDark?: boolean;
+}
+/**
+ * Renders a whole scene with the same canvas engine the editor uses and
+ * returns a PNG data URL (or `null` for empty scenes). Ignores selection.
+ */
+export function generateScenePreviewDataUrl(
+  options: ScenePreviewOptions,
+): Promise<string | null>;
 export type LibrarySvgAsset = { defaultWidth: number; defaultHeight: number;[key: string]: unknown };
 export type LibraryCategoryId = string;
 
@@ -233,6 +256,12 @@ export interface MenuBarProps {
   beforeLinks?: ReactNode;
   /** Content rendered after Settings (at the very end of the menu). */
   afterSettings?: ReactNode;
+  /** Current project name, shown in the rename dialog. */
+  projectName?: string | null;
+  /** Called when the user asks to go back to the home/studio screen. */
+  onGoHome?: () => void;
+  /** Called when the user confirms a new project name. */
+  onRenameProject?: (name: string) => void | Promise<void>;
 }
 
 export function useDrawo(): DrawoContextValue;

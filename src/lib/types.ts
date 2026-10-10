@@ -59,6 +59,12 @@ export interface DrawoProps {
   onDrawingToolChange?: (tool: NewElementType | "laser" | null) => void;
   onLocaleChange?: (locale: LocaleCode) => void;
   onThemeChange?: (theme: string, colorScheme: "light" | "dark") => void;
+  /** Current project name; surfaced in the built-in MenuBar rename dialog. */
+  projectName?: string | null;
+  /** When provided, the MenuBar shows a "go to home" entry that calls this. */
+  onGoHome?: () => void;
+  /** When provided, the MenuBar shows a "rename project" entry that calls this. */
+  onRenameProject?: (name: string) => void | Promise<void>;
   children?: ReactNode;
 }
 

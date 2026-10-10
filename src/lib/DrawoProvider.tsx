@@ -278,6 +278,9 @@ export function DrawoProvider({
   onDrawingToolChange,
   onLocaleChange,
   onThemeChange,
+  projectName,
+  onGoHome,
+  onRenameProject,
 }: DrawoProps & { children: React.ReactNode }) {
   const [openTopbarPanel, setOpenTopbarPanel] = useState<
     "sidebar" | null
@@ -1439,6 +1442,9 @@ export function DrawoProvider({
         disablePersistence,
         disableKeyboardShortcuts,
         emptyState,
+        projectName,
+        onGoHome,
+        onRenameProject,
       },
       setScene,
       setSceneWithoutHistory,

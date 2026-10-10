@@ -50,7 +50,8 @@ import {
   ObjectsAlignLeft,
   ObjectsAlignRight,
   ObjectsAlignTop,
-
+  House,
+  PencilToLine,
   PencilToSquare,
   Picture,
   Rectangles4,
@@ -73,6 +74,7 @@ import {
 import { Alt } from "@shared/lib/platform/macShortcuts";
 import { DiscordIcon, LaserPointerStylusIcon } from "@shared/ui/icons";
 import { ColorSwatchPicker } from "@shared/ui/ColorSwatchPicker";
+import { Input } from "@shared/ui/input";
 import { Slider } from "@shared/ui/slider";
 import { Switch } from "@shared/ui/switch";
 import { ThemeMenuSub } from "@app/theme/ThemeMenuSub";
@@ -112,6 +114,12 @@ export interface MenuBarProps {
   beforeLinks?: ReactNode;
   /** Content rendered after Settings (at the very end of the menu). */
   afterSettings?: ReactNode;
+  /** Current project name, shown in the rename dialog. */
+  projectName?: string | null;
+  /** Called when the user asks to go back to the home/studio screen. */
+  onGoHome?: () => void;
+  /** Called when the user confirms a new project name. */
+  onRenameProject?: (name: string) => void | Promise<void>;
 }
 
 /** Shared button visuals for dialog actions (Tailwind). */
@@ -137,8 +145,13 @@ export const MenuBar = ({
   extraMenuSections,
   beforeLinks,
   afterSettings,
+  projectName,
+  onGoHome,
+  onRenameProject,
 }: MenuBarProps) => {
   const [isClearDialogOpen, setIsClearDialogOpen] = useState(false);
+  const [isRenameDialogOpen, setIsRenameDialogOpen] = useState(false);
+  const [renameDraft, setRenameDraft] = useState("");
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [isExportingImage, setIsExportingImage] = useState(false);
   const [exportFormat, setExportFormat] = useState<ExportImageFormat>("png");
@@ -258,11 +271,26 @@ export const MenuBar = ({
     void applyOpenProject(nextFile);
   }, [applyOpenProject, pendingProjectFile]);
 
+  const handleRenameDialogOpen = (open: boolean) => {
+    setIsRenameDialogOpen(open);
+    if (open) {
+      setRenameDraft(projectName ?? "");
+    }
+  };
+
+  const handleRenameConfirm = async () => {
+    const nextName = renameDraft.trim();
+    if (!nextName) {
+      return;
+    }
+    await onRenameProject?.(nextName);
+    setIsRenameDialogOpen(false);
+  };
+
   const handleExportImage = useCallback(async () => {
     if (isExportingImage) {
       return;
     }
-
     setIsExportingImage(true);
 
     try {
@@ -304,6 +332,14 @@ export const MenuBar = ({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="drawo-menu-stagger">
+          {onGoHome ? (
+            <>
+              <DropdownMenuItem onSelect={onGoHome}>
+                <House /> {messages.menu.home}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+            </>
+          ) : null}
           <DropdownMenuItem disabled variant="accent">
             <Thunderbolt /> {messages.menu.quickActions}
           </DropdownMenuItem>
@@ -330,6 +366,11 @@ export const MenuBar = ({
               >
                 <Picture /> {messages.menu.exportProject}
               </DropdownMenuItem>
+              {onRenameProject ? (
+                <DropdownMenuItem onClick={() => handleRenameDialogOpen(true)}>
+                  <PencilToLine /> {messages.menu.renameProject}
+                </DropdownMenuItem>
+              ) : null}
               {extraFileItems}
               <DropdownMenuSeparator />
               <DropdownMenuItem
@@ -954,6 +995,48 @@ export const MenuBar = ({
                 onClick={handleConfirmOpenProject}
               >
                 {messages.dialogs.openProject.confirm}
+              </button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={isRenameDialogOpen} onOpenChange={handleRenameDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{messages.dialogs.renameProject.title}</DialogTitle>
+            <DialogDescription>
+              {messages.dialogs.renameProject.description}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-2">
+            <p className="label">{messages.dialogs.renameProject.label}</p>
+            <Input
+              autoFocus
+              value={renameDraft}
+              placeholder={messages.dialogs.renameProject.placeholder}
+              onChange={(event) => setRenameDraft(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  void handleRenameConfirm();
+                }
+              }}
+            />
+          </div>
+          <DialogFooter>
+            <div className="flex flex-col-reverse gap-2 md:flex-row md:justify-end">
+              <DialogClose asChild>
+                <button type="button" className={DIALOG_BTN_SECONDARY}>
+                  {messages.dialogs.renameProject.cancel}
+                </button>
+              </DialogClose>
+              <button
+                type="button"
+                className={DIALOG_BTN_PRIMARY}
+                disabled={renameDraft.trim().length === 0}
+                onClick={() => void handleRenameConfirm()}
+              >
+                {messages.dialogs.renameProject.confirm}
               </button>
             </div>
           </DialogFooter>
